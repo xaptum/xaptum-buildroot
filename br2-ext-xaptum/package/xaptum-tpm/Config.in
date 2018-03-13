@@ -1,0 +1,7 @@
+config BR2_PACKAGE_XAPTUM_TPM
+	bool "xaptum-tpm"
+	help
+	  Utilities for interacting with the TPM 2.0 chip used to access the
+	  Xaptum Edge Network Fabric.
+
+	  https://github.com/xaptum/xaptum-tpm
