@@ -1,0 +1,156 @@
+config BR2_PACKAGE_AMCL
+	bool "amcl"
+	help
+	  AMCL is a standards compliant C cryptographic library with no
+	  external dependencies, specifically designed to support the
+	  Internet of Things (IoT).
+
+	  https://github.com/milagro-crypto/milagro-crypto-c
+
+if BR2_PACKAGE_AMCL
+
+menuconfig BR2_PACKAGE_AMCL_RSA
+	bool "RSA support"
+	default y
+	help
+	  Include support for RSA-based cryptography.
+
+if BR2_PACKAGE_AMCL_RSA
+
+config BR2_PACKAGE_AMCL_RSA_2048
+	bool "2048 bit"
+	default y
+
+config BR2_PACKAGE_AMCL_RSA_3072
+	bool "3072 bit"
+	default y
+
+config BR2_PACKAGE_AMCL_RSA_4096
+	bool "4096 bit"
+
+endif
+
+menuconfig BR2_PACKAGE_AMCL_CURVE
+	bool "ECC support"
+	default y
+	help
+	   Include support for elliptic curve-based cryptography.
+
+if BR2_PACKAGE_AMCL_CURVE
+
+config BR2_PACKAGE_AMCL_CURVE_ANSSI
+	bool "ANSSI"
+
+config BR2_PACKAGE_AMCL_CURVE_BLS383
+	bool "BLS383"
+
+config BR2_PACKAGE_AMCL_CURVE_BLS461
+	bool "BLS461"
+
+config BR2_PACKAGE_AMCL_CURVE_BN254
+	bool "BN254"
+
+config BR2_PACKAGE_AMCL_CURVE_BN254CX
+	bool "BN254CX"
+	default y
+
+config BR2_PACKAGE_AMCL_CURVE_BRAINPOOL
+	bool "BRAINPOOL"
+
+config BR2_PACKAGE_AMCL_CURVE_C25519
+	bool "C25519"
+
+config BR2_PACKAGE_AMCL_CURVE_C41417
+	bool "C41417"
+
+config BR2_PACKAGE_AMCL_CURVE_ED25519
+	bool "ED25519"
+	default y
+
+config BR2_PACKAGE_AMCL_CURVE_FP256BN
+	bool "FP256BN"
+
+config BR2_PACKAGE_AMCL_CURVE_FP512BN
+	bool "FP512BN"
+
+config BR2_PACKAGE_AMCL_CURVE_GOLDILOCKS
+	bool "GOLDILOCKS"
+	default y
+
+config BR2_PACKAGE_AMCL_CURVE_HIFIVE
+	bool "HIFIVE"
+
+config BR2_PACKAGE_AMCL_CURVE_NIST256
+	bool "NIST256"
+	default y
+
+config BR2_PACKAGE_AMCL_CURVE_NIST384
+	bool "NIST384"
+
+config BR2_PACKAGE_AMCL_CURVE_NIST521
+	bool "NIST521"
+
+config BR2_PACKAGE_AMCL_CURVE_NUMS256E
+	bool "NUMS256E"
+
+config BR2_PACKAGE_AMCL_CURVE_NUMS256W
+	bool "NUMS256W"
+
+config BR2_PACKAGE_AMCL_CURVE_NUMS384E
+	bool "NUMS483E"
+
+config BR2_PACKAGE_AMCL_CURVE_NUMS384W
+	bool "NUMS384W"
+
+config BR2_PACKAGE_AMCL_CURVE_NUMS512E
+	bool "NUMS512E"
+
+config BR2_PACKAGE_AMCL_CURVE_NUMS512W
+	bool "NUMS512W"
+
+endif
+
+config BR2_PACKAGE_AMCL_MPIN
+	bool "M-PIN support"
+	default y
+	depends on BR2_PACKAGE_AMCL_CURVE_BLS383  || \
+	           BR2_PACKAGE_AMCL_CURVE_BLS461  || \
+	           BR2_PACKAGE_AMCL_CURVE_BN254   || \
+	           BR2_PACKAGE_AMCL_CURVE_BN254CX || \
+		   BR2_PACKAGE_AMCL_CURVE_FP256BN || \
+	           BR2_PACKAGE_AMCL_CURVE_FP512BN
+	help
+	  Include support for M-PIN, a multi-factor, zero knowledge
+	  authentication protocol intended to replace the well-known
+	  Username/Password authentication mechanism.
+
+if BR2_PACKAGE_AMCL_MPIN
+
+config BR2_PACKAGE_AMCL_MPIN_MAXPIN
+	int "maximum PIN value"
+	default 10000
+	help
+	  The maximum allowable value for an M-PIN pin.
+
+config BR2_PACKAGE_AMCL_MPIN_PBLEN
+	int "maximum PIN length"
+	default 14
+	help
+	  The maximum size in bits of an M-PIN pin.
+
+endif
+
+config BR2_PACKAGE_AMCL_WCC
+	bool "WCC (Wang/Chow-Choo) support"
+	default y
+	depends on BR2_PACKAGE_AMCL_CURVE_BLS383  || \
+	           BR2_PACKAGE_AMCL_CURVE_BLS461  || \
+	           BR2_PACKAGE_AMCL_CURVE_BN254   || \
+	           BR2_PACKAGE_AMCL_CURVE_BN254CX || \
+		   BR2_PACKAGE_AMCL_CURVE_FP256BN || \
+	           BR2_PACKAGE_AMCL_CURVE_FP512BN
+	help
+	  Include support for Wang/Chow-Choo identity-based key
+	  agreement protocols.
+
+endif

@@ -1,1 +1,2 @@
+source "$BR2_EXTERNAL_XAPTUM_PATH/package/amcl/Config.in"
 source "$BR2_EXTERNAL_XAPTUM_PATH/package/xaptum-tpm/Config.in"
