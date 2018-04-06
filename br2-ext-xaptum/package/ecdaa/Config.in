@@ -1,0 +1,44 @@
+config BR2_PACKAGE_ECDAA
+	bool "ecdaa"
+	depends on BR2_PACKAGE_AMCL
+	depends on BR2_PACKAGE_AMCL_CURVE
+	help
+	  ECDAA is a C implementation of elliptic-curve-based
+	  Direct Anonymous Attestation (DAA) signatures.
+
+	  https://github.com/xaptum/ecdaa
+
+if BR2_PACKAGE_ECDAA
+
+config BR2_PACKAGE_ECDAA_TPM_SUPPORT
+	bool "TPM support"
+	default y
+	depends on BR2_PACKAGE_XAPTUM_TPM
+	help
+	  Support using a TPM 2.0 for DAA signatures.
+
+config BR2_PACKAGE_ECDAA_USE_LIBSODIUM
+	bool "Use the libsodium RNG"
+	default y
+	depends on BR2_PACKAGE_LIBSODIUM
+	help
+	  Use the libsodium RNG. Without this, the user must
+	  supply their own.
+
+config BR2_PACKAGE_ECDAA_CURVE_BN254
+	bool "BN254"
+	depends on BR2_PACKAGE_AMCL_CURVE_BN254
+
+config BR2_PACKAGE_ECDAA_CURVE_BN254CX
+	bool "BN254CX"
+	depends on BR2_PACKAGE_AMCL_CURVE_BN254CX
+
+config BR2_PACKAGE_ECDAA_CURVE_BLS383
+	bool "BLS383"
+	depends on BR2_PACKAGE_AMCL_CURVE_BLS383
+
+config BR2_PACKAGE_ECDAA_CURVE_FP256BN
+	depends on BR2_PACKAGE_AMCL_CURVE_FP256BN
+	bool "FP256BN"
+
+endif
