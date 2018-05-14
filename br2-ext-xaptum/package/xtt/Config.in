@@ -1,0 +1,29 @@
+config BR2_PACKAGE_XTT
+	bool "xtt"
+	select BR2_PACKAGE_ECDAA
+	select BR2_PACKAGE_ECDAA_CURVE_FP256BN
+	select BR2_PACKAGE_LIBSODIUM
+	help
+	  XTT is a C implementation of the XTT Trusted Transit protocol
+	  for securing Internet of Things (IoT) devices and network
+	  traffic.
+
+	  https://github.com/xaptum/xtt
+
+if BR2_PACKAGE_XTT
+
+config BR2_PACKAGE_XTT_TPM_SUPPORT
+	bool "TPM support"
+	default y
+	select BR2_PACKAGE_ECDAA_TPM_SUPPORT
+	select BR2_PACKAGE_XAPTUM_TPM
+	help
+	  Support using a TPM 2.0 for DAA signatures.
+
+config BR2_PACKAGE_XTT_UTILS
+       bool "Utility programs"
+       default n
+       help
+         Install utility programs for examining the TPM contents.
+
+endif
