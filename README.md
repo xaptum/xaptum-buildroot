@@ -30,3 +30,11 @@ To build the Xaptum Router Card (xap-rc-001) firmware run:
     # Build the firmware
     make
 ```
+
+## Help
+
+Read the [Buildroot
+manual](https://buildroot.org/downloads/manual/manual.html) manually,
+paying particular attention to the section on [Project-specific
+customization](https://buildroot.org/downloads/manual/manual.html#customize). It
+is very well written.
