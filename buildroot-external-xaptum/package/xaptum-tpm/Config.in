@@ -5,3 +5,13 @@ config BR2_PACKAGE_XAPTUM_TPM
 	  Xaptum Edge Network Fabric.
 
 	  https://github.com/xaptum/xaptum-tpm
+
+if BR2_PACKAGE_XAPTUM_TPM
+
+config BR2_PACKAGE_XAPTUM_TPM_UTILS
+       bool "Utility programs"
+       default n
+       help
+         Install utility programs for examining the TPM contents.
+
+endif

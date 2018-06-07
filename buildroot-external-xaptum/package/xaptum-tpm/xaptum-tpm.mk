@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-XAPTUM_TPM_VERSION = v0.5.1
+XAPTUM_TPM_VERSION = v0.5.4
 XAPTUM_TPM_SITE = $(call github,xaptum,xaptum-tpm,$(XAPTUM_TPM_VERSION))
 XAPTUM_TPM_LICENSE = Apache-2.0
 XAPTUM_TPM_LICENSE_FILES = LICENSE
