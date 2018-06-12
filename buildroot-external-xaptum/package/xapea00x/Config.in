@@ -1,0 +1,7 @@
+config BR2_PACKAGE_XAPEA00X
+	bool "xapea00x"
+	help
+	  xapea00x is a kernel driver for the XAP-EA-00x line of
+	  Xaptum ENF Access modules.
+
+	  https://github.com/xaptum/xapea00x
