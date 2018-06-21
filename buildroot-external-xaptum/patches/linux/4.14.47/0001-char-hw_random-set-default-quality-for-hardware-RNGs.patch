@@ -1,0 +1,28 @@
+From bd9109348b5ece373da3b78c632a5ef5f91eccc4 Mon Sep 17 00:00:00 2001
+From: "David R. Bild" <david.bild@xaptum.com>
+Date: Thu, 21 Jun 2018 18:38:39 +0000
+Subject: [PATCH] char/hw_random/: set default quality for hardware RNGs
+
+---
+ drivers/char/hw_random/tpm-rng.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/char/hw_random/tpm-rng.c b/drivers/char/hw_random/tpm-rng.c
+index d6d448266f07..ba4619dd8df4 100644
+--- a/drivers/char/hw_random/tpm-rng.c
++++ b/drivers/char/hw_random/tpm-rng.c
+@@ -29,8 +29,9 @@ static int tpm_rng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+ }
+ 
+ static struct hwrng tpm_rng = {
+-	.name = MODULE_NAME,
+-	.read = tpm_rng_read,
++	.name    = MODULE_NAME,
++	.read    = tpm_rng_read,
++	.quality = 512,
+ };
+ 
+ static int __init rng_init(void)
+-- 
+2.11.0
+
