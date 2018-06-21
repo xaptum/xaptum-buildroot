@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-XTT_VERSION = v0.8.1
+XTT_VERSION = v0.8.2
 XTT_SITE = $(call github,xaptum,xtt,$(XTT_VERSION))
 XTT_LICENSE = Apache-2.0
 XTT_LICENSE_FILES = LICENSE
@@ -21,8 +21,10 @@ else
 endif
 
 ifeq ($(BR2_PACKAGE_XTT_UTILS),y)
+	XTT_CONF_OPTS += -DBUILD_EXAMPLES=ON
 	XTT_CONF_OPTS += -DBUILD_UTILS=ON
 else
+	XTT_CONF_OPTS += -DBUILD_EXAMPLES=OFF
 	XTT_CONF_OPTS += -DBUILD_UTILS=OFF
 endif
 
