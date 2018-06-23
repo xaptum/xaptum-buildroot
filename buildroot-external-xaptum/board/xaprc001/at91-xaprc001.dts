@@ -49,8 +49,7 @@
 			pinctrl-names = "default";
 			pinctrl-0 = <&pinctrl_sdmmc0_default>;
 			non-removable;
-			max-frequency = <26000000>;
-			mmc-hs200-1_8v;
+			mmc-ddr-1_8v;
 			disable-wp;
 			status = "okay";
 		};
