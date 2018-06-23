@@ -54,7 +54,13 @@ Xplained development board that closely mirrors that of the
 ## xaprc_eval_tool
 
 This tool can be used to control the development board for the router
-cards.  It is built in
+cards.  It uses `libftdi`, not `ftd2xx`, and thus can be run
+concurrently with the `ftdi_sio` kernel module.
+
+You can attach to the `/dev/ttyS2` (or `/dev/ttyS3`) serial console
+while also controlling the development board.
+
+It is built in
 `buildroot/output/host/usr/bin/xaprc_eval_tool`.
 
 `xaprc_eval_tool -s 1 boot romboot reboot` will configure slot 1 to
