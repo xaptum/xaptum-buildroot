@@ -1,12 +1,25 @@
-From bd9109348b5ece373da3b78c632a5ef5f91eccc4 Mon Sep 17 00:00:00 2001
+From f2098268f75acfb371ffec5e0d7769bb85f26d7f Mon Sep 17 00:00:00 2001
 From: "David R. Bild" <david.bild@xaptum.com>
 Date: Thu, 21 Jun 2018 18:38:39 +0000
-Subject: [PATCH] char/hw_random/: set default quality for hardware RNGs
+Subject: [PATCH 1/2] char/hw_random/: set default quality for hardware RNGs
 
 ---
- drivers/char/hw_random/tpm-rng.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/char/hw_random/atmel-rng.c | 1 +
+ drivers/char/hw_random/tpm-rng.c   | 5 +++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/char/hw_random/atmel-rng.c b/drivers/char/hw_random/atmel-rng.c
+index 661c82cde0f2..8da85de0f83c 100644
+--- a/drivers/char/hw_random/atmel-rng.c
++++ b/drivers/char/hw_random/atmel-rng.c
+@@ -84,6 +84,7 @@ static int atmel_trng_probe(struct platform_device *pdev)
+ 	atmel_trng_enable(trng);
+ 	trng->rng.name = pdev->name;
+ 	trng->rng.read = atmel_trng_read;
++	trng->rng.quality = 512;
+ 
+ 	ret = hwrng_register(&trng->rng);
+ 	if (ret)
 diff --git a/drivers/char/hw_random/tpm-rng.c b/drivers/char/hw_random/tpm-rng.c
 index d6d448266f07..ba4619dd8df4 100644
 --- a/drivers/char/hw_random/tpm-rng.c
