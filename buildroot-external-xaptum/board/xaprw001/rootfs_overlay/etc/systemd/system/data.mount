@@ -1,0 +1,11 @@
+[Unit]
+Description=Mount Persistent Data Directory
+
+[Mount]
+What=/dev/mmcblk0p4
+Where=/data
+Type=ext4
+Options=defaults
+
+[Install]
+WantedBy=local-fs.target

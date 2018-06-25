@@ -1,0 +1,173 @@
+From 6efa656999839a7755238f1f0b3e91621191e1f6 Mon Sep 17 00:00:00 2001
+From: "David R. Bild" <david.bild@xaptum.com>
+Date: Wed, 20 Jun 2018 18:01:59 +0000
+Subject: [PATCH 2/2] sdhc: set eMMC voltage to 1.8
+
+---
+ .../xaptum/xaprc001/xaprc001mmc_uboot_defconfig    |  4 +-
+ .../xaprc001/xaprc001mmc_uboot_dev_defconfig       |  4 +-
+ driver/Config.in.memory                            | 15 +++++
+ driver/sdhc.c                                      | 67 ++++++++++++++++++++++
+ 4 files changed, 84 insertions(+), 6 deletions(-)
+
+diff --git a/contrib/board/xaptum/xaprc001/xaprc001mmc_uboot_defconfig b/contrib/board/xaptum/xaprc001/xaprc001mmc_uboot_defconfig
+index d106ed8..8709c0b 100644
+--- a/contrib/board/xaptum/xaprc001/xaprc001mmc_uboot_defconfig
++++ b/contrib/board/xaptum/xaprc001/xaprc001mmc_uboot_defconfig
+@@ -1,8 +1,6 @@
+ CONFIG_XAPRC001=y
+ CONFIG_RAM_256MB=y
+ CONFIG_DDR3=y
+-CONFIG_SDCARD=y
+-CONFIG_SDHC0=y
+-CONFIG_SCLK=y
++CONFIG_SDHC_VOLTAGE_1_8=y
+ CONFIG_SCLK_BYPASS=y
+ # CONFIG_ENTER_NWD is not set
+diff --git a/contrib/board/xaptum/xaprc001/xaprc001mmc_uboot_dev_defconfig b/contrib/board/xaptum/xaprc001/xaprc001mmc_uboot_dev_defconfig
+index 7a62d42..60f8cf1 100644
+--- a/contrib/board/xaptum/xaprc001/xaprc001mmc_uboot_dev_defconfig
++++ b/contrib/board/xaptum/xaprc001/xaprc001mmc_uboot_dev_defconfig
+@@ -1,9 +1,7 @@
+ CONFIG_XAPRC001=y
+ CONFIG_RAM_256MB=y
+ CONFIG_DDR3=y
+-CONFIG_SDCARD=y
+-CONFIG_SDHC0=y
++CONFIG_SDHC_VOLTAGE_1_8=y
+ CONFIG_DEBUG=y
+-CONFIG_SCLK=y
+ CONFIG_SCLK_BYPASS=y
+ # CONFIG_ENTER_NWD is not set
+diff --git a/driver/Config.in.memory b/driver/Config.in.memory
+index ab20d3b..760387b 100644
+--- a/driver/Config.in.memory
++++ b/driver/Config.in.memory
+@@ -191,6 +191,21 @@ config CONFIG_SDHC1
+ 
+ endchoice
+ 
++choice CONFIG_SDHC_VOLTAGE
++	prompt "SD Host I/O Voltage"
++	depends on CONFIG_SDHC
++	default CONFIG_SDHC_VOLTAGE_3_3
++	help
++	  This interface allows you to select which I/O voltage is used for the SD Card.
++
++config CONFIG_SDHC_VOLTAGE_1_8
++	bool "1.8V"
++
++config CONFIG_SDHC_VOLTAGE_3_3
++	bool "3.3V"
++
++endchoice
++
+ config CONFIG_FATFS
+ 	bool
+ 	depends on CONFIG_SDCARD
+diff --git a/driver/sdhc.c b/driver/sdhc.c
+index 398f83c..d9baa4c 100644
+--- a/driver/sdhc.c
++++ b/driver/sdhc.c
+@@ -270,6 +270,35 @@
+ #define	SDMMC_HC1R_CARDDTL	(0x1 << 6)	/* Card Detect Test Level */
+ #define	SDMMC_HC1R_CARDDSEL	(0x1 << 7)	/* Card Detect Signal Selection */
+ 
++/* SDMMC_HC2R */
++#define	SDMMC_HC2R_UHSMS	(0x7 << 0)	/* UHS Mode Select */
++#define		SDMMC_HC2R_UHSMS_SDR12		(0x0 << 0)
++#define		SDMMC_HC2R_UHSMS_SDR25		(0x1 << 0)
++#define		SDMMC_HC2R_UHSMS_SDR50		(0x2 << 0)
++#define		SDMMC_HC2R_UHSMS_SDR104	(0x3 << 0)
++#define		SDMMC_HC2R_UHSMS_DDR50		(0x4 << 0)
++#define	SDMMC_HC2R_HS200EN	(0xF << 0)	/* HS200 Mode Enable */
++#define		SDMMC_HC2R_HS200EN_HS200	(0xB << 0)
++#define	SDMMC_HC2R_VS18EN	(0x1 << 3)	/* 1.8V Signaling Enable */
++#define	SDMMC_HC2R_DRVSEL	(0x3 << 4)	/* Driver Strength Select */
++#define		SDMMC_HC2R_DRVSEL_TYPEA	(0x0 << 4)
++#define		SDMMC_HC2R_DRVSEL_TYPEB	(0x1 << 4)
++#define		SDMMC_HC2R_DRVSEL_TYPEC	(0x2 << 4)
++#define		SDMMC_HC2R_DRVSEL_TYPED	(0x3 << 4)
++#define	SDMMC_HC2R_EXTUN	(0x1 << 6)	/* Execute Timing */
++#define	SDMMC_HC2R_SCLKSEL	(0x1 << 7)	/* Sampling Clock Select */
++#define	SDMMC_HC2R_ASINTEN	(0x1 << 14)	/* Asynchronous Interrupt Enable */
++#define	SDMMC_HC2R_PVALEN	(0x1 << 15)	/* Preset Value Enable */
++
++/* SDMMC_CALCR */
++#define	SDMMC_CALCR_EN		(0x1  << 0)	/* PADs Calibration Enable */
++#define	SDMMC_CALCR_ALWYSON	(0x1  << 4)	/* Calibration Analog Always ON */
++#define	SDMMC_CALCR_TUNDIS	(0x1  << 5)	/* Calibration During Tuning Disabled */
++#define	SDMMC_CALCR_CNTVAL	(0xFF << 8)	/* Calibration Counter Value */
++#define		SDMMC_CALCR_CNTVAL_VAL(val) ((SDMMC_CALCR_CNTVAL & ((val) << 8)))
++#define	SDMMC_CALCR_CALN	(0xF  << 16)	/* Calibration N Status */
++#define	SDMMC_CALCR_CALP	(0xF  << 24)	/* Calibration P Status */
++
+ /*---------------------------------------------------------------*/
+ 
+ static unsigned int sdhc_get_base(void)
+@@ -331,6 +360,18 @@ static void sdhc_softare_reset_dat(void)
+ 		;
+ }
+ 
++static void sdhc_set_io_voltage(void)
++{
++#ifdef CONFIG_SDHC_VOLTAGE_1_8
++	unsigned short value = sdhc_readw(SDMMC_HC2R);
++
++	value |= SDMMC_HC2R_VS18EN;
++	value |= SDMMC_HC2R_DRVSEL_TYPEC;
++
++	sdhc_writew(SDMMC_HC2R, value);
++#endif
++}
++
+ static void sdhc_set_power(void)
+ {
+ 	unsigned char value = sdhc_readb(SDMMC_PCR);
+@@ -436,6 +477,28 @@ static int sdhc_set_bus_width(struct sd_card *sdcard, unsigned int width)
+ 	return 0;
+ }
+ 
++#define ROUND_INT_DIV(n,d) (((n) + ((d)-1)) / (d))
++
++static int sdhc_set_tuning(struct sd_card *sdcard)
++{
++	unsigned int cntval = ROUND_INT_DIV(sdcard->host->caps_max_clock,
++					    4 * 500000UL);
++
++	unsigned long value = sdhc_readl(SDMMC_CALCR);
++	value |= SDMMC_CALCR_EN;
++	value |= SDMMC_CALCR_ALWYSON;
++	value &= ~SDMMC_CALCR_TUNDIS;
++	value &= ~SDMMC_CALCR_CNTVAL;
++	value |= SDMMC_CALCR_CNTVAL_VAL(cntval);
++	sdhc_writel(SDMMC_CALCR, value);
++
++	do {
++		value = sdhc_readl(SDMMC_CALCR);
++	} while (value & SDMMC_CALCR_EN);
++
++	return 0;
++}
++
+ static int sdhc_host_capability(struct sd_card *sdcard)
+ {
+ 	struct sd_host *host = sdcard->host;
+@@ -522,10 +585,14 @@ static int sdhc_init(struct sd_card *sdcard)
+ 
+ 	sdhc_softare_reset();
+ 
++	sdhc_set_io_voltage();
++
+ 	sdhc_set_power();
+ 
+ 	sdhc_host_capability(sdcard);
+ 
++	sdhc_set_tuning(sdcard);
++
+ 	if (sdhc_is_card_inserted(sdcard) <= 0) {
+ 		dbg_info("SDHC: Error: No Card Inserted\n");
+ 		return -1;
+-- 
+2.11.0
+

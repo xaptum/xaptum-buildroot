@@ -41,15 +41,24 @@ The firmware image will be built in
 Three defconfigs are available.
 
 `xaprc001_defconfig` - the production config for the XAP-RC-001 router
-card
+card.
 
 `xaprc001_dev_defconfig` - a config for the XAP-RC-001 router card
-that enables extra development and debugging tools and options
+that enables extra development and debugging tools and options.
 
 `sama5d2_xplained_xaprc001_defconfig` - a config for the SAMA5D2
 Xplained development board that closely mirrors that of the
 `xaprc001`. Useful for development that requires additional hardware
 (e.g., an ethernet port or additional USB port).
+
+`xaprw001_defconfig` - the production config the XAP-RW-001 router
+card. This hardware is nearly identifical to the XAP-RC-001, but
+includes a WiFi chipset.
+
+`xaprw001_dev_defconfig` - a config the XAP-RW-001 router card that
+enables extra development and debugging tools and options. This
+hardware is nearly identifical to the XAP-RC-001, but includes a WiFi
+chipset.
 
 ## xaprc_eval_tool
 
