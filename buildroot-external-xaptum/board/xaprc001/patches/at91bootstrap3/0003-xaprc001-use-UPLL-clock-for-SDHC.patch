@@ -1,0 +1,34 @@
+From aac2c1e42d2f3e7b8e03a58875cbab8f0f8e07b0 Mon Sep 17 00:00:00 2001
+From: "David R. Bild" <david.bild@xaptum.com>
+Date: Fri, 20 Jul 2018 15:55:08 +0000
+Subject: [PATCH 3/3] xaprc001: use UPLL clock for SDHC
+
+---
+ contrib/board/xaptum/xaprc001/xaprc001.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/contrib/board/xaptum/xaprc001/xaprc001.c b/contrib/board/xaptum/xaprc001/xaprc001.c
+index 14596c7..bb29c2e 100644
+--- a/contrib/board/xaptum/xaprc001/xaprc001.c
++++ b/contrib/board/xaptum/xaprc001/xaprc001.c
+@@ -425,7 +425,7 @@ void hw_init(void)
+ 
+ #ifdef CONFIG_SDCARD
+ 
+-#define ATMEL_SDHC_GCKDIV_VALUE		1
++#define ATMEL_SDHC_GCKDIV_VALUE	4
+ 
+ /**
+  * SD/eMMC pinmux initialization
+@@ -456,7 +456,7 @@ void at91_sdhc_hw_init(void)
+ 
+ 	pmc_sam9x5_enable_periph_clk(CONFIG_SYS_ID_SDHC);
+ 	pmc_enable_periph_generated_clk(CONFIG_SYS_ID_SDHC,
+-					GCK_CSS_MCK_CLK,
++					GCK_CSS_UPLL_CLK,
+ 					ATMEL_SDHC_GCKDIV_VALUE);
+ }
+ #endif
+-- 
+2.11.0
+

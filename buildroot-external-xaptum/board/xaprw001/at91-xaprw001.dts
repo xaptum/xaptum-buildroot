@@ -1,7 +1,7 @@
 /*
- * at91-sama5d2_xpt_mpcie.dts - Device Tree file for SAMA5D2 Xaptum mPCIe OC
+ * Device Tree file for Xaptum xap-rw-001
  *
- * DAB-Embedded, 2018
+ * Copyright 2018 - Xaptum, Inc.
  */
 
 /dts-v1/;
@@ -30,7 +30,26 @@
 		};
 	};
 
+	regulators {
+		vdd_1v8_reg: regulator {
+			compatible = "regulator-fixed";
+			status = "okay";
+			regulator-name = "sdhci_1v8_hs";
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <1800000>;
+			regulator-always-on;
+		};
+	};
+
+	pwrseqs {
+		sdmmc1_pwrseq: sdmmc1_pwrseq {
+			compatible = "mmc-pwrseq-simple";
+			reset-gpios = <&pioA 36 GPIO_ACTIVE_LOW>;
+		};
+	};
+
 	ahb {
+
 		usb0: gadget@00300000 {
 			status = "okay";
 		};
@@ -48,6 +67,7 @@
 			bus-width = <8>;
 			pinctrl-names = "default";
 			pinctrl-0 = <&pinctrl_sdmmc0_default>;
+			vqmmc-supply = <&vdd_1v8_reg>;
 			non-removable;
 			mmc-ddr-1_8v;
 			disable-wp;
@@ -55,21 +75,25 @@
 		};
 
 		sdmmc1: sdio-host@b0000000 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
 			bus-width = <4>;
 			pinctrl-names = "default";
 			pinctrl-0 = <&pinctrl_sdmmc1_default>;
-			disable-wp;
+			mmc-pwrseq = <&sdmmc1_pwrseq>;
+			vqmmc-supply = <&vdd_1v8_reg>;
 			non-removable;
+			disable-wp;
+			pm-ignore-notify;
 			status = "okay";
 
-			bcrmf: bcrmf@1 {
+			brcmf: brcmf@1 {
 				reg = <1>;
-				compatible = "bcrm,bcm43xx-fmac";
+				compatible = "brcm,bcm43xx-fmac";
 				interrupt-parent = <&pioA>;
 				interrupts = <34 0>;
 				interrupt-names = "host-wake";
-				pinctrl-names = "default";
-				pinctrl-0 = <&pinctrl_cyw4339_default>;
 			};
 		};
 
@@ -157,13 +181,23 @@
 				};
 
 				pinctrl_sdmmc1_default: sdmmc1_default {
-					cmd_data {
+					sdio {
 						pinmux = <PIN_PA28__SDMMC1_CMD>,
 							 <PIN_PA18__SDMMC1_DAT0>,
 							 <PIN_PA19__SDMMC1_DAT1>,
 							 <PIN_PA20__SDMMC1_DAT2>,
 							 <PIN_PA21__SDMMC1_DAT3>,
-                                                         <PIN_PA22__SDMMC1_CK>;
+							 <PIN_PA22__SDMMC1_CK>;
+						bias-disable;
+					};
+
+					cyw4339 {
+						pinmux = <PIN_PB2__GPIO>,
+							 <PIN_PB4__GPIO>,
+							 <PIN_PB5__GPIO>,
+							 <PIN_PB6__GPIO>,
+							 <PIN_PB7__GPIO>,
+							 <PIN_PB13__PCK1>;
 						bias-disable;
 					};
 				};
@@ -189,17 +223,6 @@
 						 <PIN_PD23__GPIO>;
 					bias-disable;
 				};
-
-				pinctrl_cyw4339_default: cyw4339_default {
-					pinmux = <PIN_PB13__PCK1>,
-					         <PIN_PB2__GPIO>,
-					         <PIN_PB4__GPIO>,
-						 <PIN_PB5__GPIO>,
-						 <PIN_PB6__GPIO>,
-						 <PIN_PB7__GPIO>;
-					bias-disable;
-				};
-
 			};
 		};
 	};

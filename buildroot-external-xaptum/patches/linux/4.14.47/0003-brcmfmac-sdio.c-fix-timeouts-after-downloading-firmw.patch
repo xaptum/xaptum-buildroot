@@ -1,0 +1,33 @@
+From e0c2e58d0844ca05ff06807af347fa30e6ced52a Mon Sep 17 00:00:00 2001
+From: "David R. Bild" <david.bild@xaptum.com>
+Date: Sat, 21 Jul 2018 00:51:09 +0000
+Subject: [PATCH 3/3] brcmfmac/sdio.c: fix timeouts after downloading firmware
+
+---
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
+index eccd25febfe6..0b35a8b46c96 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
+@@ -4018,6 +4018,16 @@ static void brcmf_sdio_firmware_callback(struct device *dev, int err,
+ 		goto fail;
+ 	bus->alp_only = false;
+ 
++	/*
++	 * The later call to brcmf_sdio_clkctl() times out if
++	 * called too soon after downloading the firmware, so
++	 * sleep for a bit.
++	 *
++	 * FIXME: There must be a better way to fix this than
++	 * just sleeping.
++	 */
++	msleep(4000);
++
+ 	/* Start the watchdog timer */
+ 	bus->sdcnt.tickcnt = 0;
+ 	brcmf_sdio_wd_timer(bus, true);
+-- 
+2.11.0
+
