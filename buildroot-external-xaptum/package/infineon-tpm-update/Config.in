@@ -1,0 +1,5 @@
+config BR2_PACKAGE_INFINEON_TPM_UPDATE
+	bool "Infineon TPM Update Tool"
+	select BR2_PACKAGE_OPENSSL
+	help
+	  Firmware update utility for Infineon TPMs.
