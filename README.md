@@ -105,11 +105,11 @@ http://ww1.microchip.com/downloads/en/DeviceDoc/sam-ba_3.2.1-linux_x86_64.tar
 # Reboot the card into the romboot mode
 xaprc_eval_tool -s 1 boot romboot reboot
 
-# Enable regular users to write to to the device
+# Enable regular users to write to the device
 sudo chmod a+rw /dev/ttyACM0
 
 # Flash the new firmware to the card
-sam-ba -p serial -b sama5d2-xplained -a sdmmc -c write:sdcard.img
+sam-ba -p serial -b sama5d2-xplained -a sdmmc -c write:emmc.img
 
 # Reboot the card from the emmc
 xaprc_eval_tool -s 1 boot emcc reboot
