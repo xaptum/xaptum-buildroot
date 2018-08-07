@@ -1,6 +1,6 @@
 board=xaprw001
 board_name=xaprw001
-bootargs=console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rw rootwait rootfstype=ext4 brcmfmac.debug=0x2001E log_buf_len=64000000
+bootargs=console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rw rootwait rootfstype=ext4
 bootcmd=ext4load mmc 0:2 0x21000000 boot/at91-xaprw001.dtb; ext4load mmc 0:2 0x22000000 boot/zImage; bootz 0x22000000 - 0x21000000
 bootdelay=0
 stderr=serial
