@@ -1,0 +1,41 @@
+From 4773765ab31338ce2dd33965a5b357c9eba78d4f Mon Sep 17 00:00:00 2001
+From: Mirza Krak <mirza.krak@northern.tech>
+Date: Wed, 22 Aug 2018 14:27:31 +0200
+Subject: [PATCH 09/10] configs: xaprc001: integration of Mender
+
+Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
+---
+ include/configs/xaprc001.h | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/include/configs/xaprc001.h b/include/configs/xaprc001.h
+index bbc97b459d..22696eb640 100644
+--- a/include/configs/xaprc001.h
++++ b/include/configs/xaprc001.h
+@@ -34,15 +34,15 @@
+  * at91-bootstrap and u-boot in eMMC VFAT partition.
+  * Kernel and device tree in /boot on eMMC EXT4 partition.
+  */
+-#define CONFIG_SYS_MMC_ENV_DEV		0
+-#define CONFIG_ENV_OFFSET		0x4400
+ #define CONFIG_ENV_SIZE		0x4000
+ 
+-#define CONFIG_BOOTCOMMAND	"ext4load mmc 0:2 0x21000000 /boot/at91-xaprc001.dtb; " \
+-				"ext4load mmc 0:2 0x22000000 /boot/zImage; " \
+-				"bootz 0x22000000 - 0x21000000"
+-
+-#define CONFIG_BOOTARGS \
+-	"console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rw rootwait"
++#define CONFIG_BOOTCOMMAND \
++	"setenv bootargs rw rootwait console=ttyS0,115200 earlyprintk; " \
++	"run mender_setup; " \
++	"setenv bootargs root=${mender_kernel_root} ${bootargs}; " \
++	"ext4load ${mender_uboot_root} 0x21000000 /boot/at91-xaprw001.dtb; " \
++	"ext4load ${mender_uboot_root} 0x22000000 /boot/zImage; " \
++	"bootz 0x22000000 - 0x21000000; " \
++	"run mender_try_to_recover;"
+ 
+ #endif
+-- 
+2.18.0
+

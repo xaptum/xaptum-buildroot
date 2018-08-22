@@ -1,7 +1,7 @@
 From 7cd6c824f06bcbb7dbd64165ade04429cde1d124 Mon Sep 17 00:00:00 2001
 From: "David R. Bild" <david.bild@xaptum.com>
 Date: Wed, 20 Jun 2018 14:25:53 +0000
-Subject: [PATCH 3/3] xaprc001: enable bootcount limit support for mender
+Subject: [PATCH 03/10] xaprc001: enable bootcount limit support for mender
 
 ---
  configs/xaprc001_defconfig     | 7 +++----
@@ -59,5 +59,5 @@ index dba7cbc21f..342ca85a75 100644
  CONFIG_CLK_AT91=y
  CONFIG_AT91_UTMI=y
 -- 
-2.11.0
+2.18.0
 

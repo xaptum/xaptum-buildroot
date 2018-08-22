@@ -1,0 +1,47 @@
+From b49d38e90f38d6b038600c74b605787bea134ef1 Mon Sep 17 00:00:00 2001
+From: "David R. Bild" <david.bild@xaptum.com>
+Date: Fri, 3 Aug 2018 16:20:40 +0000
+Subject: [PATCH 04/10] xaprc001: specify regulator for emmc
+
+---
+ arch/arm/dts/at91-xaprc001.dts | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm/dts/at91-xaprc001.dts b/arch/arm/dts/at91-xaprc001.dts
+index bfb47f7ed5..d6c889f907 100644
+--- a/arch/arm/dts/at91-xaprc001.dts
++++ b/arch/arm/dts/at91-xaprc001.dts
+@@ -11,17 +11,26 @@
+ 		stdout-path = &uart1;
+ 	};
+ 
++	regulators {
++		vdd_1v8_reg: regulator {
++			compatible = "regulator-fixed";
++			status = "okay";
++			regulator-name = "sdhci_1v8_hs";
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++			regulator-always-on;
++		};
++	};
++
+ 	ahb {
+ 		sdmmc0: sdio-host@a0000000 {
+ 			bus-width = <8>;
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&pinctrl_sdmmc0_cmd_dat_default &pinctrl_sdmmc0_ck_cd_default>;
++			vqmmc-supply = <&vdd_1v8_reg>;
++			non-removable;
+ 			mmc-ddr-1_8v;
+ 			disable-wp;
+-			cap-mmc-highspeed;
+-			/* DAB: Need to try to use higher speed:
+-				sd-uhs-sdr50, sd-uhs-sdr104, sd-uhs-ddr50 */
+-			non-removable;
+ 			status = "okay";
+ 			u-boot,dm-pre-reloc;
+ 		};
+-- 
+2.18.0
+
