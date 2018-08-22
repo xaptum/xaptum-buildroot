@@ -1,11 +1,11 @@
 From 45b441d43345904f05de7175089f57fa6c53f757 Mon Sep 17 00:00:00 2001
 From: "David R. Bild" <david.bild@xaptum.com>
 Date: Wed, 20 Jun 2018 13:37:03 +0000
-Subject: [PATCH 2/3] xaprc001: add separate dev and prod defconfigs
+Subject: [PATCH 02/10] xaprc001: add separate dev and prod defconfigs
 
 ---
- configs/xaprc001_defconfig     | 29 +++--------------------------
- configs/xaprc001_dev_defconfig | 42 ++++++++++++++++++++++++++++++++++++++++++
+ configs/xaprc001_defconfig     | 29 +++--------------------
+ configs/xaprc001_dev_defconfig | 42 ++++++++++++++++++++++++++++++++++
  2 files changed, 45 insertions(+), 26 deletions(-)
  create mode 100644 configs/xaprc001_dev_defconfig
 
@@ -116,5 +116,5 @@ index 0000000000..dba7cbc21f
 +CONFIG_TIMER=y
 +CONFIG_ATMEL_PIT_TIMER=y
 -- 
-2.11.0
+2.18.0
 
