@@ -30,6 +30,11 @@
 		};
 	};
 
+	pwrseq_sdmmc1: pwrseq_sdmmc1 {
+		compatible = "mmc-pwrseq-simple";
+		reset-gpios = <&pioA 36 GPIO_ACTIVE_LOW>;
+	};
+
 	ahb {
 
 		usb0: gadget@00300000 {
@@ -59,6 +64,7 @@
 			bus-width = <4>;
 			pinctrl-names = "default";
 			pinctrl-0 = <&pinctrl_sdmmc1_default>;
+                        mmc-pwrseq = <&pwrseq_sdmmc1>;
 			non-removable;
 			disable-wp;
 			keep-power-in-suspend;
@@ -178,11 +184,6 @@
 					cyw4339_osc {
 						pinmux = <PIN_PB13__PCK1>;
 						bias-disable;
-					};
-
-					cyw4339_wlan_on {
-						pinmux = <PIN_PB4__GPIO>;
-						bias-pull-up;
 					};
 
 					cyw4339_bt_on {
