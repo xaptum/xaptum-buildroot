@@ -30,6 +30,24 @@
 		};
 	};
 
+	reg_vdd_1v8: reg_vdd_1v8 {
+		compatible = "regulator-fixed";
+		regulator-name = "vdd_1v8";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		regulator-always-on;
+		status = "okay";
+	};
+
+	reg_vdd_3v3: reg_vdd_3v3 {
+		compatible = "regulator-fixed";
+		regulator-name = "vdd_3v3";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		regulator-always-on;
+		status = "okay";
+	};
+
 	ahb {
 		usb0: gadget@00300000 {
 			status = "okay";
@@ -48,6 +66,8 @@
 			bus-width = <8>;
 			pinctrl-names = "default";
 			pinctrl-0 = <&pinctrl_sdmmc0_default>;
+			vmmc-supply = <&reg_vdd_3v3>;
+			vqmmc-supply = <&reg_vdd_1v8>;
 			non-removable;
 			mmc-ddr-1_8v;
 			disable-wp;
@@ -130,12 +150,8 @@
 							 <PIN_PA6__SDMMC0_DAT4>,
 							 <PIN_PA7__SDMMC0_DAT5>,
 							 <PIN_PA8__SDMMC0_DAT6>,
-							 <PIN_PA9__SDMMC0_DAT7>;
-						bias-disable;
-					};
-
-					ck_cd_rstn_vddsel {
-						pinmux = <PIN_PA0__SDMMC0_CK>,
+							 <PIN_PA9__SDMMC0_DAT7>,
+							 <PIN_PA0__SDMMC0_CK>,
 							 <PIN_PA10__SDMMC0_RSTN>;
 						bias-disable;
 					};
