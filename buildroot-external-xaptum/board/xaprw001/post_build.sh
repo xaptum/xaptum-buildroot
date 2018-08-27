@@ -71,12 +71,3 @@ rm -fr usr/share/factory
 # serial-getty@ttyS0.service starts automatically,
 # serial-getty@console.service just hangs
 rm -f etc/systemd/system/getty.target.wants/serial-getty@console.service
-
-device_type=$(cat ${ROOT_FS}/data/mender/device_type | sed 's/[^=]*=//')
-artifact_name=$(cat ${ROOT_FS}/etc/mender/artifact_info | sed 's/[^=]*=//')
-
-${HOST_DIR}/usr/bin/mender-artifact write rootfs-image \
-    --update ${BINARIES_DIR}/rootfs.ext4 \
-    --output-path ${BINARIES_DIR}/${artifact_name}.mender \
-    --artifact-name ${artifact_name} \
-    --device-type ${device_type}
