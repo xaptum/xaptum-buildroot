@@ -75,6 +75,11 @@ rm -f etc/systemd/system/getty.target.wants/serial-getty@console.service
 device_type=$(cat ${ROOT_FS}/data/mender/device_type | sed 's/[^=]*=//')
 artifact_name=$(cat ${ROOT_FS}/etc/mender/artifact_info | sed 's/[^=]*=//')
 
+if [ -z "${device_type}" ] || [ -z "${artifact_name}" ]; then
+    echo "missing files required by Mender (/etc/data/mender/device_type or /etc/mender/artifact_info)"
+    exit 1
+fi
+
 ${HOST_DIR}/usr/bin/mender-artifact write rootfs-image \
     --update ${BINARIES_DIR}/rootfs.ext4 \
     --output-path ${BINARIES_DIR}/${artifact_name}.mender \
