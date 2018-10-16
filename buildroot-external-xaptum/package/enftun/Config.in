@@ -1,0 +1,11 @@
+config BR2_PACKAGE_ENFTUN
+	bool "enftun"
+	select BR2_PACKAGE_XTT
+	select BR2_PACKAGE_LIBCONFIG
+	select BR2_PACKAGE_LIBUV
+
+	help
+	  enftun is a tunnel client for connecting to the Xaptum Edge
+	  Network Fabric (ENF).
+
+	  https://github.com/xaptum/enftun
