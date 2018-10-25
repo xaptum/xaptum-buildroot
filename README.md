@@ -45,7 +45,7 @@ card.
 `xaprc001_dev_defconfig` - a config for the XAP-RC-001 router card
 that enables extra development and debugging tools and options.
 
-`sama5d2_xplained_xaprc001_defconfig` - a config for the SAMA5D2
+`sama5d2_xplained_xaprc_defconfig` - a config for the SAMA5D2
 Xplained development board that closely mirrors that of the
 `xaprc001`. Useful for development that requires additional hardware
 (e.g., an ethernet port or additional USB port).
