@@ -12,7 +12,7 @@ External buildroot tree for the Xaptum router card firmware.
 
 After first cloning this repo, initialize the submodule:
 
-    git submodule init --update
+    git submodule update --init
 
 ## Usage
 
