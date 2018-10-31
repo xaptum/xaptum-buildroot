@@ -1,0 +1,5 @@
+/dev/root / auto rw 0 1
+# Mount partition containing zImage
+# Installing a new kernel is as simple as
+# scp zImage target:/boot, and reboot target
+/dev/mmcblk1p1 /boot auto rw,noauto 0 2
