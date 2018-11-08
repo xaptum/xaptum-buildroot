@@ -1,0 +1,206 @@
+version: 2.1
+
+commands:
+  checkout-with-cache:
+    description: "A checkout that caches the .git directory"
+    parameters:
+      version:
+        type: string
+        default: v1
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}
+            - source-v1-
+      - checkout
+      - run:
+          name: "Update submodules"
+          command: git submodule update --init
+      - save_cache:
+          key: source-<< parameters.version >>-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+  install-circleci-deps:
+    description: "Install dependencies required by CircleCI"
+    steps:
+      - run:
+          name: Install CircleCI dependencies
+          command: |
+            apt-get update && apt-get install -y \
+              git wget ca-certificates
+
+  configure-mender-cacerts:
+    description: "Add CA certs for our mender server"
+    steps:
+      - run:
+          name: Install Xaptum-Mender root CA cert
+          command: |
+            cp .circleci/Xaptum-Mender.crt /usr/local/share/ca-certificates/
+            update-ca-certificates
+      - run:
+          name: Add /etc/hosts entry for Xaptum mender server
+          command: |
+            echo "13.59.76.99     mender.xaptum.xyz" >> /etc/hosts
+
+jobs:
+  build:
+    parameters:
+      defconfig:
+        type: string
+    docker:
+      - image: debian:stretch
+    resource_class: large
+    steps:
+      - install-circleci-deps
+      - run:
+          name: Install build dependencies
+          command: |
+            apt-get update && apt-get install -y \
+              bc binutils file                   \
+              git patch wget                     \
+              build-essential gcc g++ make       \
+              cpio tar unzip bzip2 gzip unzip    \
+              bash perl python sed               \
+              libftdi-dev
+      - checkout-with-cache
+      - restore_cache:
+          keys:
+            - buildroot-ccache-v1-{{ .Branch }}-{{ .Revision }}
+            - buildroot-ccache-v1-{{ .Branch }}
+            - buildroot-ccache-v1-
+      - run:
+          name: Make build directory
+          command: |
+            mkdir -p build/<< parameters.defconfig >>
+      - run:
+          name: Prepare config
+          command: |
+            cd build/<< parameters.defconfig >>
+            make O=$PWD -C ../.. << parameters.defconfig>>_defconfig
+      - run:
+          name: Build toolchain
+          command: |
+            cd  build/<< parameters.defconfig >>
+            make toolchain
+      - run:
+          name: Build kernel
+          command: |
+            cd  build/<< parameters.defconfig >>
+            make linux
+      - run:
+          name: Build image
+          command: |
+            cd  build/<< parameters.defconfig >>
+            make
+      - save_cache:
+          key: buildroot-ccache-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - "/root/.buildroot-ccache"
+      - run:
+          name: Collect and rename build artifacts
+          command: |
+            ./.circleci/collect_artifacts.sh << parameters.defconfig >>
+      - store_artifacts:
+          path: build/<< parameters.defconfig >>/artifacts
+          destination: images
+      - persist_to_workspace:
+          root: /root/project
+          paths:
+            - build/<< parameters.defconfig >>/artifacts
+
+  sign:
+    parameters:
+      defconfig:
+        type: string
+    docker:
+      - image: debian:stretch
+    steps:
+      - install-circleci-deps
+      - checkout-with-cache
+      - attach_workspace:
+          at: /root/project
+      - run:
+          name: Install mender-artifact tool
+          command: |
+            wget https://d1b0l86ne08fsf.cloudfront.net/mender-artifact/2.4.0/mender-artifact -O /usr/bin/mender-artifact
+            chmod a+x /usr/bin/mender-artifact
+      - run:
+          name: Sign the artifact
+          command: |
+            ./.circleci/sign_artifact.sh << parameters.defconfig >>
+      - store_artifacts:
+          path: build/<< parameters.defconfig >>/artifacts/*artifact-signed*.mender
+          destination: images/
+      - persist_to_workspace:
+          root: /root/project
+          paths:
+            - build/<< parameters.defconfig >>/artifacts/*artifact-signed*.mender
+
+  deploy:
+    parameters:
+      defconfig:
+        type: string
+    docker:
+      - image: debian:stretch
+    steps:
+      - install-circleci-deps
+      - checkout-with-cache
+      - configure-mender-cacerts
+      - attach_workspace:
+          at: /root/project
+      - run:
+          name: Install mender-cli
+          command: |
+            wget https://d1b0l86ne08fsf.cloudfront.net/mender-cli/1.1.0/mender-cli -O /usr/bin/mender-cli
+            chmod a+x /usr/bin/mender-cli
+      - run:
+          name: Login to mender
+          command: |
+            mender-cli login --server https://mender.xaptum.xyz --username $XAPTUM_MENDER_DEV_USERNAME --password $XAPTUM_MENDER_DEV_PASSWORD
+      - run:
+          name: Deploy the signed artifact
+          command: |
+            ./.circleci/deploy_signed_artifact.sh << parameters.defconfig >>
+
+workflows:
+  version: 2
+  xaprc001:
+    jobs:
+      - build:
+          defconfig: xaprc001
+  xaprc001_dev:
+    jobs:
+      - build:
+          defconfig: xaprc001_dev
+      - sign:
+          defconfig: xaprc001_dev
+          requires:
+            - build
+      - deploy:
+          defconfig: xaprc001_dev
+          context: dev.mender.xaptum.xyz
+          requires:
+            - sign
+  xaprc001_prov:
+    jobs:
+      - build:
+          defconfig: xaprc001_prov
+  xaprw001:
+    jobs:
+      - build:
+          defconfig: xaprw001
+  xaprw001_dev:
+    jobs:
+      - build:
+          defconfig: xaprw001_dev
+      - sign:
+          defconfig: xaprw001_dev
+          requires:
+            - build
+      - deploy:
+          defconfig: xaprw001_dev
+          context: dev.mender.xaptum.xyz
+          requires:
+            - sign
