@@ -1,0 +1,14 @@
+config BR2_PACKAGE_LIBOPENSSL11
+	bool "libopenssl11"
+	select BR2_PACKAGE_ZLIB
+
+	help
+	  A collaborative effort to develop a robust, commerical-grade,
+	  fully featured, and Open Source toolkit implementing the
+	  Secure Sockets Layer (SSL v2/v3) and Transport Security
+	  (TLS v1) as well as full-strength general-purpose
+	  cryptography library.
+
+	  http://www.openssl.org/
+
+	  Note: Some helper scripts need perl.
