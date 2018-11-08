@@ -3,6 +3,7 @@ config BR2_PACKAGE_ENFTUN
 	select BR2_PACKAGE_XTT
 	select BR2_PACKAGE_LIBCONFIG
 	select BR2_PACKAGE_LIBUV
+	select BR2_PACKAGE_LIBOPENSSL11
 
 	help
 	  enftun is a tunnel client for connecting to the Xaptum Edge
