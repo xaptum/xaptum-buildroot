@@ -1,3 +1,6 @@
 [submodule "buildroot"]
 	path = buildroot
 	url = git://git.buildroot.net/buildroot
+[submodule "tpm-proxy"]
+	path = tpm-proxy
+	url = git@github.com:xaptum/tpm-proxy.git
