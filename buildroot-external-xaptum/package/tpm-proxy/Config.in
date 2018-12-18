@@ -1,0 +1,10 @@
+config BR2_PACKAGE_TPM_PROXY
+	bool "tpm_proxy"
+	depends on BR2_TOOLCHAIN_HAS_THREADS
+
+	help
+	  A driver to expose the TPM provisioning interface.
+
+	  https://github.com/xaptum/tpm-proxy
+comment "tpm-proxy needs a toolchain w/ threads"
+        depends on !BR2_TOOLCHAIN_HAS_THREADS
