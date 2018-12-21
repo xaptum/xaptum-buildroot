@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-ECDAA_VERSION = v0.9.1
+ECDAA_VERSION = v0.10.0
 ECDAA_SITE = $(call github,xaptum,ecdaa,$(ECDAA_VERSION))
 ECDAA_LICENSE = Apache-2.0
 ECDAA_LICENSE_FILES = LICENSE
