@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-ENFTUN_VERSION = v0.1.3
+ENFTUN_VERSION = v0.3.0
 ENFTUN_SITE = $(call github,xaptum,enftun,$(ENFTUN_VERSION))
 ENFTUN_LICENSE = Apache-2.0
 ENFTUN_LICENSE_FILES = LICENSE
