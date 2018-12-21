@@ -1,0 +1,20 @@
+#!/bin/sh
+# devtmpfs does not get automounted for initramfs
+/bin/mount -t devtmpfs devtmpfs /dev
+echo "----- initramfs /init script enter -----" | tee /dev/kmsg
+export PATH=/bin:/sbin 
+
+rescue_shell(){
+    echo "----- Something went wrong. Dropping to shell... -----" | tee /dev/kmsg
+    busybox --install -s
+    exec /bin/sh
+}
+
+#this process can not end, either run /sbin/init or start a shell
+#busybox --install -s
+#exec /bin/sh
+
+exec 0</dev/console
+exec 1>/dev/console
+exec 2>/dev/console
+exec /sbin/init "$@"
