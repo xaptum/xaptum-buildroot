@@ -1,0 +1,67 @@
+diff --git a/contrib/board/xaptum/xaprc001/xaprc001ram_uboot_dev_defconfig b/contrib/board/xaptum/xaprc001/xaprc001ram_uboot_dev_defconfig
+new file mode 100644
+index 0000000..0267f0c
+--- /dev/null
++++ b/contrib/board/xaptum/xaprc001/xaprc001ram_uboot_dev_defconfig
+@@ -0,0 +1,9 @@
++CONFIG_XAPRC001=y
++CONFIG_RAM_256MB=y
++CONFIG_DDR3=y
++CONFIG_SDHC_VOLTAGE_1_8=y
++CONFIG_DEBUG=y
++CONFIG_SCLK_BYPASS=y
++CONFIG_NOFLASH=y
++CONFIG_CONFIG_JUMP_ADDR=0x26f00000
++# CONFIG_ENTER_NWD is not set
+diff --git a/driver/Config.in.memory b/driver/Config.in.memory
+index ab20d3b..9f0c800 100644
+--- a/driver/Config.in.memory
++++ b/driver/Config.in.memory
+@@ -131,6 +131,9 @@ config	CONFIG_SDCARD
+ 	bool "SD card"
+ 	depends on ALLOW_SDCARD
+ 
++config CONFIG_NOFLASH
++        bool "none"
++
+ endchoice
+ 
+ config CONFIG_MEMORY
+diff --git a/driver/common.c b/driver/common.c
+index 17f824d..8e92718 100644
+--- a/driver/common.c
++++ b/driver/common.c
+@@ -46,6 +46,12 @@ char cmdline_args[CMDLINE_BUF_LEN];
+ #endif
+ #endif
+ 
++/* Do not interact with any NVMEM and return success. */
++int skip_image_load(struct image_info *image)
++{
++	return 0;
++}
++
+ void init_load_image(struct image_info *image)
+ {
+ 	memset(image,		0, sizeof(*image));
+@@ -115,6 +121,8 @@ void init_load_image(struct image_info *image)
+ 	load_image = &load_nandflash;
+ #elif defined(CONFIG_SDCARD)
+ 	load_image = &load_sdcard;
++#elif defined(CONFIG_NOFLASH)
++	load_image = &skip_image_load;
+ #else
+ #error "No booting media_str specified!"
+ #endif
+diff --git a/driver/driver_cpp.mk b/driver/driver_cpp.mk
+index fa1e9a0..49c99f7 100644
+--- a/driver/driver_cpp.mk
++++ b/driver/driver_cpp.mk
+@@ -460,3 +460,7 @@ endif
+ ifeq ($(CONFIG_QSPI), y)
+ CPPFLAGS += -DCONFIG_QSPI
+ endif
++
++ifeq ($(CONFIG_NOFLASH), y)
++CPPFLAGS += -DCONFIG_NOFLASH
++endif
