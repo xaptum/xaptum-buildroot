@@ -1,5 +1,5 @@
-board=xaprw001
-board_name=xaprw001
+board=xaprc001
+board_name=xaprc001
 bootargs=console=ttyS0,115200 earlyprintk rw
 bootcmd=bootz 0x22000000 - 0x21000000
 bootdelay=0
