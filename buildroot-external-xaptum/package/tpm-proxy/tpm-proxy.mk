@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-TPM_PROXY_VERSION = 76c70813c0ae6c2ae86e3f01ac6da34dbcdd3d38
+TPM_PROXY_VERSION = 47caa82d603b71b68e53a460a6a1e832fe7c1712
 TPM_PROXY_SITE = ssh://git@github.com/xaptum/tpm-proxy.git
 TPM_PROXY_SITE_METHOD = git
 TPM_PROXY_LICENSE = GPL-2.0
