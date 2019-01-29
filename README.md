@@ -12,28 +12,58 @@ External buildroot tree for the Xaptum router card firmware.
 
 After first cloning this repo, initialize the submodule:
 
-    git submodule init --update
+    git submodule update --init
 
 ## Usage
 
 To build the Xaptum Router Card (xap-rc-001) firmware run:
 
 ``` bash
-    # Initialize the default config
-    make xaprc001_defconfig
+# Enter an out-of-tree directory for the build
+mkdir build && cd build
 
-    # Customize the config, if desired
-    make menuconfig
+# Initialize the default config
+make O=$PWD -C .. xaprc001_defconfig
 
-    # Customize the linux config, if desired
-    make linux-menuconfig
+# Customize the config, if desired
+make menuconfig
 
-    # Build the firmware
-    make
+# Customize the linux config, if desired
+make linux-menuconfig
+
+# Build the firmware
+make
 ```
 
 The firmware image will be built in
-`buildroot/output/images/emmc.img`.
+`images/emmc.img`.
+
+Use separate build directories to simplify working with multiple
+configurations.  The builds will not interfere with each other and
+switching between configurations won't require a clean and full
+rebuild.
+
+``` bash
+cd build
+
+# Initialize a build directory for one config
+mkdir sama5d2_xplained_xaprc
+pushd sama5d2_xplained_xaprc
+
+make O=$PWD -C ../.. sama5d2_xplained_xaprc_defconfig
+<...>
+
+popd
+
+# Initialize a build directory for second config
+mkdir xaprc001_defconfig
+pushd xaprc001_defconfig
+
+make O=$PWD -C ../.. xaprc001_defconfig
+<...>
+
+popd
+```
 
 ## Defconfigs
 
@@ -45,7 +75,7 @@ card.
 `xaprc001_dev_defconfig` - a config for the XAP-RC-001 router card
 that enables extra development and debugging tools and options.
 
-`sama5d2_xplained_xaprc001_defconfig` - a config for the SAMA5D2
+`sama5d2_xplained_xaprc_defconfig` - a config for the SAMA5D2
 Xplained development board that closely mirrors that of the
 `xaprc001`. Useful for development that requires additional hardware
 (e.g., an ethernet port or additional USB port).

@@ -1,0 +1,8 @@
+board=xaprc001
+board_name=xaprc001
+bootargs=console=ttyS0,115200 earlyprintk rw
+bootcmd=bootz 0x22000000 - 0x21000000
+bootdelay=0
+stderr=serial
+stdin=serial
+stdout=serial

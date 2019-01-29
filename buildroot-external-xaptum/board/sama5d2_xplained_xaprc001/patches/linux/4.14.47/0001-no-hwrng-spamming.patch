@@ -1,0 +1,13 @@
+diff -Nuar drivers.org/char/hw_random/core.c drivers/char/hw_random/core.c
+--- a/drivers/char/hw_random/core.c	2018-05-30 22:32:31.000000000 +0200
++++ b/drivers/char/hw_random/core.c	2018-10-30 22:52:08.889211943 +0100
+@@ -407,7 +407,8 @@
+ 		mutex_unlock(&reading_mutex);
+ 		put_rng(rng);
+ 		if (rc <= 0) {
+-			pr_warn("hwrng: no data available\n");
++			if (rc != -ENODEV)
++				pr_warn("hwrng: no data available\n");
+ 			msleep_interruptible(10000);
+ 			continue;
+ 		}

@@ -1,0 +1,8 @@
+config BR2_PACKAGE_XBRIDGE
+	bool "xbridge"
+	select BR2_PACKAGE_LIBPCAP
+
+	help
+	  A userspace application to bridge two network interfaces.
+
+	  https://github.com/xaptum/xaprc

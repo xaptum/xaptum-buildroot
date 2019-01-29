@@ -1,0 +1,13 @@
+#!/bin/sh
+# devtmpfs does not get automounted for initramfs
+/bin/mount -t devtmpfs devtmpfs /dev
+echo "----- initramfs /init script enter -----" | tee /dev/kmsg
+export PATH=/bin:/sbin 
+
+#This process can not end, either run /sbin/init or start a shell
+#exec /bin/sh
+
+exec 0</dev/console
+exec 1>/dev/console
+exec 2>/dev/console
+exec /sbin/init "$@"

@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-XTT_VERSION = v0.8.2
+XTT_VERSION = v0.10.2
 XTT_SITE = $(call github,xaptum,xtt,$(XTT_VERSION))
 XTT_LICENSE = Apache-2.0
 XTT_LICENSE_FILES = LICENSE
