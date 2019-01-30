@@ -33,4 +33,22 @@ config BR2_PACKAGE_ECDAA_CURVE_FP256BN
 	select BR2_PACKAGE_AMCL_CURVE_FP256BN
 	bool "FP256BN"
 
+config BR2_PACKAGE_ECDAA_BENCHMARKS
+	bool "Benchmarks"
+	default n
+	help
+	  Build benchmarks
+
+config BR2_PACKAGE_ECDAA_EXAMPLES
+	bool "Examples"
+	default n
+	help
+	  Build example programs
+
+config BR2_PACKAGE_ECDAA_TOOL
+	bool "CLI Tool"
+	default n
+	help
+	  Install CLI tool for to work with DAA keys and signatures
+
 endif
