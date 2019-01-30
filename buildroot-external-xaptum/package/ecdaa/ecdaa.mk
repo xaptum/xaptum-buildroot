@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-ECDAA_VERSION = v0.10.0
+ECDAA_VERSION = v0.10.1
 ECDAA_SITE = $(call github,xaptum,ecdaa,$(ECDAA_VERSION))
 ECDAA_LICENSE = Apache-2.0
 ECDAA_LICENSE_FILES = LICENSE
@@ -26,6 +26,24 @@ ifeq ($(BR2_PACKAGE_ECDAA_TPM_SUPPORT),y)
 	ECDAA_CONF_OPTS += -DECDAA_TPM_SUPPORT=ON
 else
 	ECDAA_CONF_OPTS += -DECDAA_TPM_SUPPORT=OFF
+endif
+
+ifeq ($(BR2_PACKAGE_ECDAA_BENCHMARKS),y)
+	ECDAA_CONF_OPTS += -DBUILD_BENCHMARKS=ON
+else
+	ECDAA_CONF_OPTS += -DBUILD_BENCHMARKS=OFF
+endif
+
+ifeq ($(BR2_PACKAGE_ECDAA_EXAMPLES),y)
+	ECDAA_CONF_OPTS += -DBUILD_EXAMPLES=ON
+else
+	ECDAA_CONF_OPTS += -DBUILD_EXAMPLES=OFF
+endif
+
+ifeq ($(BR2_PACKAGE_ECDAA_TOOL),y)
+	ECDAA_CONF_OPTS += -DBUILD_TOOL=ON
+else
+	ECDAA_CONF_OPTS += -DBUILD_TOOL=OFF
 endif
 
 $(eval $(cmake-package))
