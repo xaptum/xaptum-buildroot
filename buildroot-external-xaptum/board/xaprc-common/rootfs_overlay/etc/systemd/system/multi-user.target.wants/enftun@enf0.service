@@ -1,1 +1,1 @@
-/etc/systemd/system/enftun@.service
+/etc/systemd/system/enftun@enf0.service
