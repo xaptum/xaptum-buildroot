@@ -21,10 +21,10 @@ config BR2_PACKAGE_XTT_TPM_SUPPORT
 	help
 	  Support using a TPM 2.0 for DAA signatures.
 
-config BR2_PACKAGE_XTT_UTILS
-       bool "Utility programs"
+config BR2_PACKAGE_XTT_TOOL
+       bool "CLI Tool"
        default n
        help
-         Install utility programs for examining the TPM contents.
+         Install CLI tool to work with XTT keys and certs.
 
 endif

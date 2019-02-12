@@ -49,6 +49,6 @@ config BR2_PACKAGE_ECDAA_TOOL
 	bool "CLI Tool"
 	default n
 	help
-	  Install CLI tool for to work with DAA keys and signatures
+	  Install CLI tool to work with DAA keys and signatures
 
 endif
