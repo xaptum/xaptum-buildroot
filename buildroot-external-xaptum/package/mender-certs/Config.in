@@ -1,0 +1,23 @@
+config BR2_PACKAGE_MENDER_CERTS
+	bool "mender-certs"
+	depends on BR2_PACKAGE_MENDER
+
+	help
+	  Installs the public certificates to authenticate firmware
+	  updates from the Xaptum Mender server.
+
+	  https://github.com/xaptum/xaprc
+
+choice
+	prompt "Install certs for which environment"
+	depends on BR2_PACKAGE_MENDER_CERTS
+
+	config BR2_PACKAGE_MENDER_CERTS_DEV
+		bool "dev"
+		default y
+
+	config BR2_PACKAGE_MENDER_CERTS_PROD
+		bool "prod"
+		default n
+
+endchoice
