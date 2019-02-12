@@ -1,0 +1,11 @@
+[Unit]
+Description=Update TPM firmware
+Before=tpm-gadget.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/TPMFactoryUpd -firmware /usr/share/slb9670/fw/TPM20_7.40.2098.0_to_TPM20_7.63.3353.0.BIN -update tpm20-emptyplatformauth -access-mode 3 /dev/tpm0
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
