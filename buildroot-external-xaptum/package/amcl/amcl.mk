@@ -5,7 +5,7 @@
 ################################################################################
 
 AMCL_VERSION = 4.7.0
-AMCL_SITE = $(call github,milagro-crypto,milagro-crypto-c,$(AMCL_VERSION))
+AMCL_SITE = $(call github,xaptum,amcl,$(AMCL_VERSION))
 AMCL_LICENSE = Apache-2.0
 AMCL_LICENSE_FILES = LICENSE
 AMCL_INSTALL_STAGING = YES
