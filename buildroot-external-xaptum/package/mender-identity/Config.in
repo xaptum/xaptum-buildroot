@@ -1,0 +1,8 @@
+config BR2_PACKAGE_MENDER_IDENTITY
+	bool "mender-identity"
+	depends on BR2_PACKAGE_MENDER
+
+	help
+	  Installs the Mender device identity script
+
+	  https://github.com/xaptum/xaprc
