@@ -14,10 +14,8 @@ choice
 
 	config BR2_PACKAGE_MENDER_CERTS_DEV
 		bool "dev"
-		default y
 
 	config BR2_PACKAGE_MENDER_CERTS_PROD
 		bool "prod"
-		default n
 
 endchoice
