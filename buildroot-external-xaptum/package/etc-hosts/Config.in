@@ -1,0 +1,19 @@
+config BR2_PACKAGE_ETC_HOSTS
+	bool "etc-hosts"
+
+	help
+	  Installs the /etc/hosts file.
+
+	  https://github.com/xaptum/xaprc
+
+choice
+	prompt "Install /etc/hosts file for which environment."
+	depends on BR2_PACKAGE_ETC_HOSTS
+
+	config BR2_PACKAGE_ETC_HOSTS_DEV
+		bool "dev"
+
+	config BR2_PACKAGE_ETC_HOSTS_PROD
+		bool "prod"
+
+endchoice
