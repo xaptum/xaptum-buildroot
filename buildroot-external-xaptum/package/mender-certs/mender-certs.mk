@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-MENDER_CERTS_VERSION = 931b98be3508e0d78dd49ebebc0385f5362b591f
+MENDER_CERTS_VERSION = 01e99131e739b1cd229c6cf72a0e401d37f64c56
 MENDER_CERTS_SITE = ssh://git@github.com/xaptum/xaprc.git
 MENDER_CERTS_SITE_METHOD = git
 MENDER_CERTS_SUPPORTS_IN_SOURCE_BUILD = NO
