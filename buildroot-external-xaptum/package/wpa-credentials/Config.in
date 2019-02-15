@@ -1,0 +1,24 @@
+config BR2_PACKAGE_WPA_CREDENTIALS
+	bool "wpa-credentials"
+	depends on BR2_PACKAGE_WPA_SUPPLICANT_NL80211
+
+	help
+	  Installs the wpa credentials on /data and symlinks to /etc
+
+	  https://github.com/xaptum/xaprc
+
+
+if BR2_PACKAGE_WPA_CREDENTIALS
+config BR2_PACKAGE_WPA_CREDENTIALS_SSID
+	string "SSID"
+	default ""
+	help
+	  SSID name.
+
+config BR2_PACKAGE_WPA_CREDENTIALS_PASS
+	string "Password"
+	default ""
+	help
+	  Wifi password
+endif
+
