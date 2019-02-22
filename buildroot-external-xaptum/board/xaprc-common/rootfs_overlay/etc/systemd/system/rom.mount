@@ -1,0 +1,11 @@
+[Unit]
+Description=Mount Read Only Identity Directory
+
+[Mount]
+What=/dev/mmcblk0
+Where=/rom
+Type=ext2
+Options=ro,offset=1073741824
+
+[Install]
+WantedBy=local-fs.target
