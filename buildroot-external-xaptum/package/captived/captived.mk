@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-CAPTIVED_VERSION = 47a2c6c68f026ae447d87c8ad4e128f93c728a44
+CAPTIVED_VERSION = dee7eb15f8986b8784bd7fe435beaf824f14088f
 CAPTIVED_SITE = ssh://git@github.com/xaptum/xaprc.git
 CAPTIVED_SITE_METHOD = git
 CAPTIVED_SUPPORTS_IN_SOURCE_BUILD = NO
