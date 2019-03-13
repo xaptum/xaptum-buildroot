@@ -1,0 +1,8 @@
+#!/bin/sh
+echo "----- Init script enter. Mounting /data -----" | tee /dev/kmsg
+
+#Mount devices that need to be present for systemd to run below. Otherwise let systemd mount them
+mount /dev/mmcblk0p4 /data
+
+#Run systemd
+exec /lib/systemd/systemd "$@"
