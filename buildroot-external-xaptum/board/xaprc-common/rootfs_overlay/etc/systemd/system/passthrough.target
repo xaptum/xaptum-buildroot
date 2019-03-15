@@ -1,0 +1,6 @@
+[Unit]
+Description=Passthrough Mode
+Requires=multi-user.target
+Conflicts=secure-host.target secure-lan.target
+After=multi-user.target
+AllowIsolate=yes

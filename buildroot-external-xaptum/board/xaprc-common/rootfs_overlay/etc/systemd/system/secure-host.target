@@ -1,0 +1,6 @@
+[Unit]
+Description=Secure Host Mode
+Requires=multi-user.target
+Conflicts=passthrough.target secure-lan.target
+After=multi-user.target
+AllowIsolate=yes
