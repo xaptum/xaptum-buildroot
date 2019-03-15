@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-WPA_CREDENTIALS_VERSION = f4005e52dec27363b3a45d3c64873f22109a2bc2
+WPA_CREDENTIALS_VERSION = a2d027d7622898abc9f96c52ec3febd584925cd6
 WPA_CREDENTIALS_SITE = ssh://git@github.com/xaptum/xaprc.git
 WPA_CREDENTIALS_SITE_METHOD = git
 WPA_CREDENTIALS_SUPPORTS_IN_SOURCE_BUILD = NO
