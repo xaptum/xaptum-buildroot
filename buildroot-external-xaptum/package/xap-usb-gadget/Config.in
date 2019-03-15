@@ -1,0 +1,7 @@
+config BR2_PACKAGE_XAP_USB_GADGET
+	bool "xap_usb_gadget"
+
+	help
+	  A service to enable the Xaptum router card USB gadget
+
+	  https://github.com/xaptum/xaprc
