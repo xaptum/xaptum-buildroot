@@ -1,0 +1,10 @@
+[Unit]
+Description=Configure Connman Wi-Fi credentials for %i
+
+[Service]
+Type=oneshot
+ExecStart=/bin/ln -s -f /data/connman/%i/wifi.config /var/lib/connman/wifi.config
+Before=connman.service
+
+[Install]
+WantedBy=secure-host.target
