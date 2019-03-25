@@ -1,0 +1,10 @@
+config BR2_PACKAGE_GT
+	bool "gt"
+	select BR2_PACKAGE_LIBCONFIG
+	select BR2_PACKAGE_LIBGLIB2
+	select BR2_PACKAGE_LIBUSBGX
+	help
+	Gadget-tool is command line tool for setting USB gadget using
+	configFS.
+
+	  https://github.com/kopasiak/gt
