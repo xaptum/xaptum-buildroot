@@ -1,0 +1,17 @@
+config BR2_PACKAGE_MACSET
+	bool "macset"
+
+	help
+	  Installs the macset helper.
+
+	  https://github.com/xaptum/xaprc
+
+if BR2_PACKAGE_MACSET
+
+config BR2_PACKAGE_MACSET_WLAN0
+	bool "wlan0 config"
+	default y
+	help
+	  Install default config for wlan0
+
+endif
