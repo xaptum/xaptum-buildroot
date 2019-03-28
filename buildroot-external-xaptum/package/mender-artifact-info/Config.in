@@ -1,0 +1,18 @@
+config BR2_PACKAGE_MENDER_ARTIFACT_INFO
+	bool "mender-artifact-info"
+	depends on BR2_PACKAGE_MENDER
+
+	help
+	  Generates the /etc/mender/artifact_info file. Joins the provided
+	  name prefix and the output of `git describe --dirty --long` to
+	  form the "artifact_name".
+
+if BR2_PACKAGE_MENDER_ARTIFACT_INFO
+
+config BR2_PACKAGE_MENDER_ARTIFACT_INFO_NAME_PREFIX
+	string "Name prefix"
+	help
+	  Prefix for the name version. For example, the name of the
+	  defconfig.
+
+endif
