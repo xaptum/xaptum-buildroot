@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-XBRIDGE_VERSION = a2d027d7622898abc9f96c52ec3febd584925cd6
+XBRIDGE_VERSION = af6917fcef2f7977d680435f0a92d1c634a5c61a
 XBRIDGE_SITE = ssh://git@github.com/xaptum/xaprc.git
 XBRIDGE_SITE_METHOD = git
 XBRIDGE_LICENSE = Apache-2.0
