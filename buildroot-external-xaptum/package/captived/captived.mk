@@ -11,6 +11,8 @@ CAPTIVED_SUPPORTS_IN_SOURCE_BUILD = NO
 
 CAPTIVED_SUBDIR = captived
 
+CAPTIVED_DEPENDENCIES += libevent jansson
+
 define CAPTIVED_INSTALL_INIT_SYSTEMD
         mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
         ln -fs ../../../../usr/lib/systemd/system/captived.service \

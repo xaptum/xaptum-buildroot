@@ -4,5 +4,4 @@ config BR2_PACKAGE_CAPTIVED
 	select BR2_PACKAGE_JANSSON
 
 	help
-	  Captive server to direct traffic on the card. 
-
+	  Captive server to direct traffic on the card.
