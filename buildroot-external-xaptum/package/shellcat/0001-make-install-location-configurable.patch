@@ -1,0 +1,15 @@
+diff --git a/Makefile b/Makefile
+index 6806872..506813c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -26,8 +26,8 @@ CFLAGS += -Wall -Wformat -Wextra -pedantic
+ CFLAGS += -D_FILE_OFFSET_BITS=64
+ CPPFLAGS += -DVERSION='"$(version)"'
+
+-PREFIX = /usr/local
+-DESTDIR =
++PREFIX ?= /usr/local
++DESTDIR ?=
+
+ bindir = $(PREFIX)/bin
+ mandir = $(PREFIX)/share/man

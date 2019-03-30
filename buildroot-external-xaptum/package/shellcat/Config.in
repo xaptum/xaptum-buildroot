@@ -1,0 +1,6 @@
+config BR2_PACKAGE_SHELLCAT
+	bool "shellcat"
+	help
+	  Templating system with shell syntax
+
+	  https://github.com/jwilk/shellcat
