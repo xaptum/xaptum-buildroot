@@ -1,7 +1,15 @@
 version: 2.1
 
 commands:
-  checkout-with-cache:
+  checkout-all:
+    description: "A checkout that updates submodules"
+    steps:
+      - checkout
+      - run:
+          name: "Update submodules"
+          command: git submodule update --init
+
+  checkout-all-with-cache:
     description: "A checkout that caches the .git directory"
     parameters:
       version:
@@ -13,10 +21,7 @@ commands:
             - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}
             - source-v1-
-      - checkout
-      - run:
-          name: "Update submodules"
-          command: git submodule update --init
+      - checkout-all
       - save_cache:
           key: source-<< parameters.version >>-{{ .Branch }}-{{ .Revision }}
           paths:
@@ -64,7 +69,7 @@ jobs:
               cpio tar unzip bzip2 gzip unzip    \
               bash perl python sed               \
               libftdi-dev
-      - checkout-with-cache
+      - checkout-all
       - restore_cache:
           keys:
             - buildroot-ccache-v1-{{ .Branch }}-{{ .Revision }}
@@ -118,7 +123,7 @@ jobs:
       - image: debian:stretch
     steps:
       - install-circleci-deps
-      - checkout-with-cache
+      - checkout-all
       - attach_workspace:
           at: /root/project
       - run:
@@ -146,7 +151,7 @@ jobs:
       - image: debian:stretch
     steps:
       - install-circleci-deps
-      - checkout-with-cache
+      - checkout-all
       - configure-mender-cacerts
       - attach_workspace:
           at: /root/project
