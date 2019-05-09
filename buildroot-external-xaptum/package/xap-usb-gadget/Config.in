@@ -5,3 +5,14 @@ config BR2_PACKAGE_XAP_USB_GADGET
 	  A service to enable the Xaptum router card USB gadget
 
 	  https://github.com/xaptum/xaprc
+
+if BR2_PACKAGE_XAP_USB_GADGET
+config BR2_PACKAGE_XAP_USB_GADGET_PRODUCT_STR
+	string "Xaprc product string"
+	help
+	  The name of the device as it will appear on the host
+
+config BR2_PACKAGE_XAP_USB_GADGET_PRODUCT_ID
+	string "Xaprc product id"
+	help
+	  The USB product ID of the Xaptum USB gadget
