@@ -16,3 +16,8 @@ config BR2_PACKAGE_XAP_USB_GADGET_PRODUCT_ID
 	string "Xaprc product id"
 	help
 	  The USB product ID of the Xaptum USB gadget
+
+config BR2_PACKAGE_XAP_USB_GADGET_SERIAL
+       bool "Include serial console in the Xaptum USB gadget"
+       default n
+endif
