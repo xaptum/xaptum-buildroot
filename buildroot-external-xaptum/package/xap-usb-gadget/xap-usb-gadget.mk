@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-XAP_USB_GADGET_VERSION = f744f494ff2db05bff9209b906b72a5cfb2b3ec6
+XAP_USB_GADGET_VERSION = c5296a943fe18c9b99bed06d67177d3e19021ce5
 XAP_USB_GADGET_SITE = ssh://git@github.com/xaptum/xaprc.git
 XAP_USB_GADGET_SITE_METHOD = git
 XAP_USB_GADGET_LICENSE = Apache-2.0
