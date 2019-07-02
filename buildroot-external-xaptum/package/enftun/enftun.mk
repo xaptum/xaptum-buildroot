@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-ENFTUN_VERSION = v0.3.4
+ENFTUN_VERSION = v0.4.1
 ENFTUN_SITE = $(call github,xaptum,enftun,$(ENFTUN_VERSION))
 ENFTUN_LICENSE = Apache-2.0
 ENFTUN_LICENSE_FILES = LICENSE
@@ -23,5 +23,7 @@ ENFTUN_CONF_OPTS += -DOPENSSL_LIBRARIES=$(STAGING_DIR)/opt/openssl11/lib
 
 # use RPATH to help enftun find the alternative openssl library
 ENFTUN_CONF_OPTS += -DCMAKE_INSTALL_RPATH=/opt/openssl11/lib
+
+ENFTUN_CONF_OPTS += -DCHECK_FORMAT=OFF
 
 $(eval $(cmake-package))
