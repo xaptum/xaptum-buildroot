@@ -4,4 +4,5 @@ Before=connman.service
 
 [Service]
 Type=oneshot
+ExecStart=/bin/ln -s -f /etc/connman/%i/recovery.config /var/lib/connman/recovery.config
 ExecStart=/bin/ln -s -f /data/connman/%i/wifi.config /var/lib/connman/wifi.config
