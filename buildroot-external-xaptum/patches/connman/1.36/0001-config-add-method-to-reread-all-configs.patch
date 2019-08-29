@@ -1,0 +1,89 @@
+From cfbb2eb50660985980695837123acc9cbc3c7527 Mon Sep 17 00:00:00 2001
+From: "David R. Bild" <david.bild@xaptum.com>
+Date: Wed, 28 Aug 2019 15:14:29 -0500
+Subject: [PATCH 1/2] config: add method to reread all configs
+
+---
+ src/config.c  | 46 ++++++++++++++++++++++++++++++++--------------
+ src/connman.h |  1 +
+ 2 files changed, 33 insertions(+), 14 deletions(-)
+
+diff --git a/src/config.c b/src/config.c
+index 4178ea86..58e4e4cf 100644
+--- a/src/config.c
++++ b/src/config.c
+@@ -944,6 +944,37 @@ static int read_configs(void)
+ 	return 0;
+ }
+ 
++static void reload_config(struct connman_config *config)
++{
++	int ret;
++
++	g_hash_table_remove_all(config->service_table);
++	load_config(config);
++	ret = __connman_service_provision_changed(config->ident);
++	if (ret > 0) {
++		/*
++		 * Re-scan the config file for any
++		 * changes
++		 */
++		g_hash_table_remove_all(config->service_table);
++		load_config(config);
++		__connman_service_provision_changed(config->ident);
++	}
++}
++
++int __connman_config_reload_services(void)
++{
++  GList *configs;
++  configs = g_hash_table_get_values(config_table);
++
++  GList *c;
++  for (c != configs; c != NULL; c = c->next) {
++    reload_config(c->data);
++  }
++
++  g_list_free(configs);
++}
++
+ static void config_notify_handler(struct inotify_event *event,
+                                         const char *ident)
+ {
+@@ -974,20 +1005,7 @@ static void config_notify_handler(struct inotify_event *event,
+ 
+ 		config = g_hash_table_lookup(config_table, ident);
+ 		if (config) {
+-			int ret;
+-
+-			g_hash_table_remove_all(config->service_table);
+-			load_config(config);
+-			ret = __connman_service_provision_changed(ident);
+-			if (ret > 0) {
+-				/*
+-				 * Re-scan the config file for any
+-				 * changes
+-				 */
+-				g_hash_table_remove_all(config->service_table);
+-				load_config(config);
+-				__connman_service_provision_changed(ident);
+-			}
++		  reload_config(config);
+ 		}
+ 	}
+ 
+diff --git a/src/connman.h b/src/connman.h
+index 82e77d37..9b33126b 100644
+--- a/src/connman.h
++++ b/src/connman.h
+@@ -609,6 +609,7 @@ bool __connman_network_get_weakness(struct connman_network *network);
+ int __connman_config_init();
+ void __connman_config_cleanup(void);
+ 
++int __connman_config_reload_services(void);
+ int __connman_config_load_service(GKeyFile *keyfile, const char *group,
+ 				  bool persistent);
+ int __connman_config_provision_service(struct connman_service *service);
+-- 
+2.11.0
+
