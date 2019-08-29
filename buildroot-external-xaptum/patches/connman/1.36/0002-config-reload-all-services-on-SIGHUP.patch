@@ -1,0 +1,34 @@
+From d262b18323f19b865f58d92e4d3cdadfde8e11de Mon Sep 17 00:00:00 2001
+From: "David R. Bild" <david.bild@xaptum.com>
+Date: Wed, 28 Aug 2019 15:15:49 -0500
+Subject: [PATCH 2/2] config: reload all services on SIGHUP
+
+---
+ src/main.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/main.c b/src/main.c
+index 318bf02b..c10a1026 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -467,6 +467,9 @@ static gboolean signal_handler(GIOChannel *channel, GIOCondition cond,
+ 		return FALSE;
+ 
+ 	switch (si.ssi_signo) {
++    case SIGHUP:
++		__connman_config_reload_services();
++		break;
+ 	case SIGINT:
+ 	case SIGTERM:
+ 		if (__terminated == 0) {
+@@ -489,6 +492,7 @@ static guint setup_signalfd(void)
+ 	int fd;
+ 
+ 	sigemptyset(&mask);
++	sigaddset(&mask, SIGHUP);
+ 	sigaddset(&mask, SIGINT);
+ 	sigaddset(&mask, SIGTERM);
+ 
+-- 
+2.11.0
+
