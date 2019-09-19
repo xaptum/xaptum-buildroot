@@ -1,7 +1,7 @@
 # Xaptum Buildroot External
 
 [![Build Status](https://circleci.com/gh/xaptum/xaptum-buildroot/tree/master.svg?style=svg)](https://circleci.com/gh/xaptum/xaptum-buildroot/tree/master)
-[![Release](https://img.shields.io/github/tag/xaptum/xaptum-buildroot.svg?label=release)](https://github.com/xaptum/xaptum-buildroot/releases)
+[![Release](https://img.shields.io/github/v/tag/xaptum/xaptum-buildroot.svg?sort=semver&label=release)](https://github.com/xaptum/xaptum-buildroot/releases)
 
 
 External buildroot tree for the Xaptum router card firmware.
