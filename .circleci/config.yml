@@ -136,7 +136,7 @@ jobs:
           command: |
             ./.circleci/sign_artifact.sh << parameters.defconfig >>
       - store_artifacts:
-          path: build/<< parameters.defconfig >>/artifacts/*artifact-signed*.mender
+          path: build/<< parameters.defconfig >>/artifacts
           destination: images/
       - persist_to_workspace:
           root: /root/project
