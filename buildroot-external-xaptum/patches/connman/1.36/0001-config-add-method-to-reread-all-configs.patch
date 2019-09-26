@@ -40,7 +40,7 @@ index 4178ea86..58e4e4cf 100644
 +  configs = g_hash_table_get_values(config_table);
 +
 +  GList *c;
-+  for (c != configs; c != NULL; c = c->next) {
++  for (c = configs; c != NULL; c = c->next) {
 +    reload_config(c->data);
 +  }
 +
