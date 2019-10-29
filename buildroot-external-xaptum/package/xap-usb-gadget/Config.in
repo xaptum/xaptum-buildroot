@@ -20,6 +20,8 @@ config BR2_PACKAGE_XAP_USB_GADGET_PRODUCT_ID
 config BR2_PACKAGE_XAP_USB_GADGET_SCM
 	bool "Enable SCM gadget"
 	default n
+	help
+	  Enable serial console (ACM) function in the USB gadget.
 
 config BR2_PACKAGE_XAP_USB_GADGET_SERIAL
        bool "Include serial console in the Xaptum USB gadget"
