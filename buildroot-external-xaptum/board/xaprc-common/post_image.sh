@@ -13,4 +13,5 @@ ${HOST_DIR}/bin/mender-artifact write rootfs-image \
     --file ${BINARIES_DIR}/rootfs.ext4 \
     --output-path ${BINARIES_DIR}/${artifact_name}.mender \
     --artifact-name ${artifact_name} \
-    --device-type ${device_type}
+    --device-type ${device_type} \
+    --version 2
