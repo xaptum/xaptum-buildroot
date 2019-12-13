@@ -81,6 +81,9 @@
 		};
 
 		sdmmc1: sdio-host@b0000000 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
 			bus-width = <4>;
 			pinctrl-names = "default";
 			pinctrl-0 = <&pinctrl_sdmmc1_default>;
