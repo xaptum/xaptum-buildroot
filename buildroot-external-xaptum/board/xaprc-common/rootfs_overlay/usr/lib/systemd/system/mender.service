@@ -1,0 +1,4 @@
+#
+# This script is intentionally a no-op
+# We don't want the mender service to start up.
+#

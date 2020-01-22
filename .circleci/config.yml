@@ -171,6 +171,7 @@ jobs:
 
 workflows:
   version: 2
+
   xaprc001:
     jobs:
       - build:
