@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-CAPTIVED_VERSION = ebdeff8b960eeda3b4e1b933e228ec19c672b083
+CAPTIVED_VERSION = 551f5d57f0f4f28903a7de0f9e85373d53276ec7
 CAPTIVED_SITE = git@github.com:glfejer/xaprc.git
 CAPTIVED_SITE_METHOD = git
 CAPTIVED_SUPPORTS_IN_SOURCE_BUILD = NO
