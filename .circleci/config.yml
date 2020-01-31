@@ -171,53 +171,50 @@ jobs:
 
 workflows:
   version: 2
-######
-###### GLF - for testing, all I need is the dev build
-######
-#
-#  xaprc001:
-#    jobs:
-#      - build:
-#          defconfig: xaprc001
-#          filters:
-#            tags:
-#              only: /^v.*/
-#  xaprc001_dev:
-#    jobs:
-#      - build:
-#          defconfig: xaprc001_dev
-#          filters:
-#            tags:
-#              only: /^v.*/
-#      - sign:
-#          defconfig: xaprc001_dev
-#          requires:
-#            - build
-#          filters:
-#            tags:
-#              only: /^v.*/
-#      - deploy:
-#          defconfig: xaprc001_dev
-#          context: dev.mender.xaptum.xyz
-#          requires:
-#            - sign
-#          filters:
-#            tags:
-#              only: /^v.*/
-#  xaprc001_prov:
-#    jobs:
-#      - build:
-#          defconfig: xaprc001_prov
-#          filters:
-#            tags:
-#              only: /^v.*/
-#  xaprw001:
-#    jobs:
-#      - build:
-#          defconfig: xaprw001
-#          filters:
-#            tags:
-#              only: /^v.*/
+
+  xaprc001:
+    jobs:
+      - build:
+          defconfig: xaprc001
+          filters:
+            tags:
+              only: /^v.*/
+  xaprc001_dev:
+    jobs:
+      - build:
+          defconfig: xaprc001_dev
+          filters:
+            tags:
+              only: /^v.*/
+      - sign:
+          defconfig: xaprc001_dev
+          requires:
+            - build
+          filters:
+            tags:
+              only: /^v.*/
+      - deploy:
+          defconfig: xaprc001_dev
+          context: dev.mender.xaptum.xyz
+          requires:
+            - sign
+          filters:
+            tags:
+              only: /^v.*/
+  xaprc001_prov:
+    jobs:
+      - build:
+          defconfig: xaprc001_prov
+          filters:
+            tags:
+              only: /^v.*/
+  xaprw001:
+    jobs:
+      - build:
+          defconfig: xaprw001
+          filters:
+            tags:
+              only: /^v.*/
   xaprw001_dev:
     jobs:
       - build:
