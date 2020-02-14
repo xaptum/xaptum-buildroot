@@ -4,8 +4,9 @@
 #
 ################################################################################
 
-ENFTUN_VERSION = v0.4.4
-ENFTUN_SITE = $(call github,xaptum,enftun,$(ENFTUN_VERSION))
+ENFTUN_VERSION = 5026d90df1d15d273d41c9636bd306fb7f0ec74f
+ENFTUN_SITE_METHOD = git
+ENFTUN_SITE = git@github.com:dberliner/enftun.git
 ENFTUN_LICENSE = Apache-2.0
 ENFTUN_LICENSE_FILES = LICENSE
 ENFTUN_SUPPORTS_IN_SOURCE_BUILD = NO
