@@ -7,6 +7,7 @@ BR2_CCACHE=y
 BR2_GLOBAL_PATCH_DIR="$(BR2_EXTERNAL_XAPTUM_PATH)/patches"
 BR2_TOOLCHAIN_EXTERNAL=y
 BR2_INIT_SYSTEMD=y
+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
 BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL_XAPTUM_PATH)/board/xaprc-common/rootfs_overlay $(BR2_EXTERNAL_XAPTUM_PATH)/board/xaprw001/rootfs_overlay $(BR2_EXTERNAL_XAPTUM_PATH)/board/xaprc-common/rootfs_dev_overlay"
 BR2_ROOTFS_POST_BUILD_SCRIPT="$(BR2_EXTERNAL_XAPTUM_PATH)/board/xaprw001/post_build.sh"
 BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh $(BR2_EXTERNAL_XAPTUM_PATH)/board/xaprc-common/post_image.sh"
