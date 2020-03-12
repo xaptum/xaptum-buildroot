@@ -48,15 +48,6 @@
 		status = "okay";
 	};
 
-	reg_vdd_3v7: reg_vdd_3v7 {
-		compatible = "regulator-fixed";
-		regulator-name = "vdd_3v7";
-		regulator-min-microvolt = <3700000>;
-		regulator-max-microvolt = <3700000>;
-		regulator-always-on;
-		status = "okay";
-	};
-
 	pwrseq_sdmmc1: pwrseq_sdmmc1 {
 		compatible = "mmc-pwrseq-simple";
 		reset-gpios = <&pioA 36 GPIO_ACTIVE_LOW>;
@@ -64,16 +55,16 @@
 
 	ahb {
 
-		usb0: gadget@00300000 {
+		usb0: gadget@300000 {
 			status = "okay";
 		};
 
-		usb1: ohci@00400000 {
+		usb1: ohci@400000 {
 			num-ports = <3>;
 			status = "disabled";
 		};
 
-		usb2: ehci@00500000 {
+		usb2: ehci@500000 {
 			status = "disabled";
 		};
 
@@ -90,10 +81,13 @@
 		};
 
 		sdmmc1: sdio-host@b0000000 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
 			bus-width = <4>;
 			pinctrl-names = "default";
 			pinctrl-0 = <&pinctrl_sdmmc1_default>;
-			vmmc-supply = <&reg_vdd_3v7>;
+			vmmc-supply = <&reg_vdd_3v3>;
 			vqmmc-supply = <&reg_vdd_1v8>;
 			mmc-pwrseq = <&pwrseq_sdmmc1>;
 			non-removable;
