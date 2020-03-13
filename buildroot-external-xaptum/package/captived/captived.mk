@@ -4,8 +4,8 @@
 #
 ################################################################################
 
-CAPTIVED_VERSION = 997855098e8489b9a5380a70befc289b705a65eb
-CAPTIVED_SITE = git@github.com:glfejer/xaprc.git
+CAPTIVED_VERSION = 004535d1997f4c5317a7e337b7e6c8a86d99ec5c
+CAPTIVED_SITE = ssh://git@github.com/xaptum/xaprc.git
 CAPTIVED_SITE_METHOD = git
 CAPTIVED_SUPPORTS_IN_SOURCE_BUILD = NO
 
