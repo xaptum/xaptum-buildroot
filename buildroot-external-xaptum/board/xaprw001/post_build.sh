@@ -49,6 +49,9 @@ rm -f  usr/lib/systemd/system/systemd-nspawn@.service
 rm -f  usr/lib/systemd/system/local-fs.target.wants/var-lib-machines.mount
 rm -f  usr/lib/systemd/system/var-lib-machines.mount
 
+# no mender service
+rm -f etc/systemd/system/multi-user.target.wants/mender.service
+
 # no X11 or XDG
 rm -fr etc/xdg
 rm -fr etc/X11
