@@ -1,0 +1,9 @@
+config BR2_PACKAGE_ENFTUN_CMD
+	bool "enftun-cmd"
+	depends on BR2_PACKAGE_ENFTUN
+
+	help
+	  Sets up the enftun data link on the Xaptum Router Card
+
+	  https://github.com/xaptum/xaprc
+
