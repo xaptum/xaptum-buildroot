@@ -1,0 +1,11 @@
+--- a/src/tcp_scm.c
++++ b/src/tcp_scm.c
+@@ -34,6 +34,8 @@
+ 
+ #define get_sin_port(addr) (((struct sockaddr_in*) addr->ai_addr)->sin_port)
+ 
++#define AF_SCM 45
++
+ static int
+ do_connect(struct enftun_tcp* tcp, struct addrinfo* addr)
+ {
