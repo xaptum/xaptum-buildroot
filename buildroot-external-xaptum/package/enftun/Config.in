@@ -12,10 +12,10 @@ config BR2_PACKAGE_ENFTUN
 	  https://github.com/xaptum/enftun
 
 if BR2_PACKAGE_XAP_USB_GADGET
-config BR2_PACKAGE_ENFTUN_SCM
-       bool "Include SCM support in Enftun"
+config BR2_PACKAGE_ENFTUN_HSS
+       bool "Include HSS support in Enftun"
        default y
        help
-         Attempt to use SCM connections if the deafult connection method fails
+         Attempt to use HSS connections if the deafult connection method fails
 endif
 

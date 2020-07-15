@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-XAP_USB_GADGET_VERSION = 8fbdfa1fb3a4f66c35043cdb1c89debad8521d4c
+XAP_USB_GADGET_VERSION = bcb4013e7e743cc699bcd00600392f0fe5959843
 XAP_USB_GADGET_SITE = ssh://git@github.com/xaptum/xaprc.git
 XAP_USB_GADGET_SITE_METHOD = git
 XAP_USB_GADGET_LICENSE = Apache-2.0
@@ -20,8 +20,8 @@ ifeq ($(BR2_PACKAGE_XAP_USB_GADGET_SERIAL),y)
        XAP_USB_GADGET_CONF_OPTS += -DENABLE_SERIAL_CONSOLE=ON
 endif
 
-ifeq ($(BR2_PACKAGE_XAP_USB_GADGET_SCM),y)
-       XAP_USB_GADGET_CONF_OPTS += -DENABLE_SCM=ON
+ifeq ($(BR2_PACKAGE_XAP_USB_GADGET_HSS),y)
+       XAP_USB_GADGET_CONF_OPTS += -DENABLE_HSS=ON
 endif
 
 $(eval $(cmake-package))

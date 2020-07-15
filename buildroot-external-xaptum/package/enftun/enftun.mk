@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-ENFTUN_VERSION = v0.5.0
+ENFTUN_VERSION = v0.7.3
 ENFTUN_SITE = $(call github,xaptum,enftun,$(ENFTUN_VERSION))
 ENFTUN_LICENSE = Apache-2.0
 ENFTUN_LICENSE_FILES = LICENSE
@@ -26,8 +26,11 @@ ENFTUN_CONF_OPTS += -DCMAKE_INSTALL_RPATH=/opt/openssl11/lib
 
 ENFTUN_CONF_OPTS += -DCHECK_FORMAT=OFF
 
-ifeq ($(BR2_PACKAGE_ENFTUN_SCM),y)
-	ENFTUN_CONF_OPTS += -DBUILD_SCM=ON
+ifeq ($(BR2_PACKAGE_ENFTUN_HSS),y)
+	ENFTUN_CONF_OPTS += -DBUILD_HSS=ON
 endif
+
+# Enftun keygen is not supported on the router card
+ENFTUN_CONF_OPTS += -DBUILD_KEYGEN=OFF
 
 $(eval $(cmake-package))
