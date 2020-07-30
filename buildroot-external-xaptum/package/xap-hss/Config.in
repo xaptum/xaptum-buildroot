@@ -1,0 +1,12 @@
+config BR2_PACKAGE_XAP_HSS
+	bool "Xaptum HSS"
+	depends on BR2_LINUX_KERNEL
+	select BR2_LINUX_KERNEL_EXT_HSS
+	select BR2_PACKAGE_HSS_NET
+	select BR2_PACKAGE_F_HSS
+
+	help
+	  Some text about HSS here
+
+comment "Xaptum HSS needs a Linux kernel to be built"
+        depends on !BR2_LINUX_KERNEL
