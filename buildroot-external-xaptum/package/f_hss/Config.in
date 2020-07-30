@@ -1,0 +1,6 @@
+config BR2_PACKAGE_F_HSS
+	bool "HSS USB Gadget Driver"
+	depends on BR2_PACKAGE_HSS_NET
+
+	help
+	  HSS USB gadget driver.
