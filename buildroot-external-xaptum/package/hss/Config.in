@@ -1,0 +1,5 @@
+config BR2_PACKAGE_HSS
+	bool
+
+	help
+	  This configuration should only be selected by linux-ext-hss
