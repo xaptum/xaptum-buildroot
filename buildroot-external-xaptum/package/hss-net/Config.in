@@ -1,0 +1,6 @@
+config BR2_PACKAGE_HSS_NET
+	bool "HSS Socket Driver"
+	depends on BR2_LINUX_KERNEL_EXT_HSS
+
+	help
+	  HSS network driver.
