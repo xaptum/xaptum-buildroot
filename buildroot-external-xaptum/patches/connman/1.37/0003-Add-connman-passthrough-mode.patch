@@ -1,0 +1,301 @@
+From 42236c03ff17eefeb58797c778db2260ff317271 Mon Sep 17 00:00:00 2001
+From: Fej <gergely.fejer@xaptum.com>
+Date: Tue, 15 Sep 2020 16:49:25 -0500
+Subject: [PATCH 3/3] Add connman passthrough mode. Handling passthrough like
+ manual mode, but no address.
+
+---
+ include/ipconfig.h |  1 +
+ include/log.h      |  4 +--
+ src/config.c       |  7 +++++
+ src/ipconfig.c     | 19 +++++++++++++
+ src/network.c      | 66 +++++++++++++++++++++++++++++++++++++++++++++-
+ src/service.c      |  1 +
+ 6 files changed, 95 insertions(+), 3 deletions(-)
+
+diff --git a/include/ipconfig.h b/include/ipconfig.h
+index 68ef40b6..43be0e35 100644
+--- a/include/ipconfig.h
++++ b/include/ipconfig.h
+@@ -48,6 +48,7 @@ enum connman_ipconfig_method {
+ 	CONNMAN_IPCONFIG_METHOD_MANUAL  = 3,
+ 	CONNMAN_IPCONFIG_METHOD_DHCP    = 4,
+ 	CONNMAN_IPCONFIG_METHOD_AUTO    = 5,
++	CONNMAN_IPCONFIG_METHOD_PASSTHROUGH    = 6,
+ };
+ 
+ struct connman_ipconfig;
+diff --git a/include/log.h b/include/log.h
+index 8b00e9dc..d197d128 100644
+--- a/include/log.h
++++ b/include/log.h
+@@ -78,8 +78,8 @@ struct connman_debug_desc {
+ 		.file = __FILE__, .flags = CONNMAN_DEBUG_FLAG_DEFAULT, \
+ 	}; \
+ 	if (__connman_debug_desc.flags & CONNMAN_DEBUG_FLAG_PRINT) \
+-		connman_debug("%s:%s() " fmt, \
+-					__FILE__, __FUNCTION__ , ## arg); \
++		connman_debug("%s:%s():%d " fmt, \
++					__FILE__, __FUNCTION__ , __LINE__, ## arg); \
+ } while (0)
+ 
+ #ifdef __cplusplus
+diff --git a/src/config.c b/src/config.c
+index 7d875e5d..df01f333 100644
+--- a/src/config.c
++++ b/src/config.c
+@@ -389,6 +389,7 @@ static bool check_address(char *address_str, char **address)
+ {
+ 	if (g_ascii_strcasecmp(address_str, "auto") == 0 ||
+ 			g_ascii_strcasecmp(address_str, "dhcp") == 0 ||
++			g_ascii_strcasecmp(address_str, "passthrough") == 0 ||
+ 			g_ascii_strcasecmp(address_str, "off") == 0) {
+ 		*address = address_str;
+ 		return false;
+@@ -1299,6 +1300,9 @@ static int try_provision_service(struct connman_config_service *config,
+ 	} else if (g_ascii_strcasecmp(config->ipv6_address, "off") == 0) {
+ 		connman_network_set_ipv6_method(network,
+ 						CONNMAN_IPCONFIG_METHOD_OFF);
++	} else if (g_ascii_strcasecmp(config->ipv6_address, "passthrough") == 0) {
++		connman_network_set_ipv6_method(network,
++						CONNMAN_IPCONFIG_METHOD_PASSTHROUGH);
+ 	} else if (g_ascii_strcasecmp(config->ipv6_address, "auto") == 0 ||
+ 			g_ascii_strcasecmp(config->ipv6_address, "dhcp") == 0) {
+ 		connman_network_set_ipv6_method(network,
+@@ -1344,6 +1348,9 @@ static int try_provision_service(struct connman_config_service *config,
+ 	} else if (g_ascii_strcasecmp(config->ipv4_address, "off") == 0) {
+ 		connman_network_set_ipv4_method(network,
+ 						CONNMAN_IPCONFIG_METHOD_OFF);
++	} else if (g_ascii_strcasecmp(config->ipv4_address, "passthrough") == 0) {
++		connman_network_set_ipv4_method(network,
++						CONNMAN_IPCONFIG_METHOD_PASSTHROUGH);
+ 	} else if (g_ascii_strcasecmp(config->ipv4_address, "auto") == 0 ||
+ 			g_ascii_strcasecmp(config->ipv4_address, "dhcp") == 0) {
+ 		connman_network_set_ipv4_method(network,
+diff --git a/src/ipconfig.c b/src/ipconfig.c
+index 25657733..499a0d68 100644
+--- a/src/ipconfig.c
++++ b/src/ipconfig.c
+@@ -1306,6 +1306,7 @@ int __connman_ipconfig_address_add(struct connman_ipconfig *ipconfig)
+ 	switch (ipconfig->method) {
+ 	case CONNMAN_IPCONFIG_METHOD_UNKNOWN:
+ 	case CONNMAN_IPCONFIG_METHOD_OFF:
++	case CONNMAN_IPCONFIG_METHOD_PASSTHROUGH:
+ 		break;
+ 	case CONNMAN_IPCONFIG_METHOD_AUTO:
+ 	case CONNMAN_IPCONFIG_METHOD_FIXED:
+@@ -1337,6 +1338,7 @@ int __connman_ipconfig_address_remove(struct connman_ipconfig *ipconfig)
+ 	case CONNMAN_IPCONFIG_METHOD_FIXED:
+ 	case CONNMAN_IPCONFIG_METHOD_DHCP:
+ 	case CONNMAN_IPCONFIG_METHOD_MANUAL:
++	case CONNMAN_IPCONFIG_METHOD_PASSTHROUGH:
+ 		err = __connman_ipconfig_address_unset(ipconfig);
+ 		connman_ipaddress_clear(ipconfig->address);
+ 
+@@ -1361,6 +1363,8 @@ int __connman_ipconfig_address_unset(struct connman_ipconfig *ipconfig)
+ 	case CONNMAN_IPCONFIG_METHOD_FIXED:
+ 	case CONNMAN_IPCONFIG_METHOD_DHCP:
+ 	case CONNMAN_IPCONFIG_METHOD_MANUAL:
++	case CONNMAN_IPCONFIG_METHOD_PASSTHROUGH:
++
+ 		if (ipconfig->type == CONNMAN_IPCONFIG_TYPE_IPV4)
+ 			err = connman_inet_clear_address(ipconfig->index,
+ 							ipconfig->address);
+@@ -1518,6 +1522,7 @@ bool __connman_ipconfig_is_usable(struct connman_ipconfig *ipconfig)
+ 	case CONNMAN_IPCONFIG_METHOD_FIXED:
+ 	case CONNMAN_IPCONFIG_METHOD_DHCP:
+ 	case CONNMAN_IPCONFIG_METHOD_MANUAL:
++	case CONNMAN_IPCONFIG_METHOD_PASSTHROUGH:
+ 		break;
+ 	}
+ 
+@@ -1661,6 +1666,8 @@ const char *__connman_ipconfig_method2string(enum connman_ipconfig_method method
+ 		return "manual";
+ 	case CONNMAN_IPCONFIG_METHOD_DHCP:
+ 		return "dhcp";
++	case CONNMAN_IPCONFIG_METHOD_PASSTHROUGH:
++		return "passthrough";
+ 	case CONNMAN_IPCONFIG_METHOD_AUTO:
+ 		return "auto";
+ 	}
+@@ -1678,6 +1685,8 @@ enum connman_ipconfig_method __connman_ipconfig_string2method(const char *method
+ 		return CONNMAN_IPCONFIG_METHOD_MANUAL;
+ 	else if (g_strcmp0(method, "dhcp") == 0)
+ 		return CONNMAN_IPCONFIG_METHOD_DHCP;
++	else if (g_strcmp0(method, "passthrough") == 0)
++		return CONNMAN_IPCONFIG_METHOD_PASSTHROUGH;
+ 	else if (g_strcmp0(method, "auto") == 0)
+ 		return CONNMAN_IPCONFIG_METHOD_AUTO;
+ 	else
+@@ -1762,6 +1771,7 @@ void __connman_ipconfig_append_ipv4(struct connman_ipconfig *ipconfig,
+ 	switch (ipconfig->method) {
+ 	case CONNMAN_IPCONFIG_METHOD_UNKNOWN:
+ 	case CONNMAN_IPCONFIG_METHOD_OFF:
++	case CONNMAN_IPCONFIG_METHOD_PASSTHROUGH:
+ 		return;
+ 
+ 	case CONNMAN_IPCONFIG_METHOD_FIXED:
+@@ -1823,6 +1833,7 @@ void __connman_ipconfig_append_ipv6(struct connman_ipconfig *ipconfig,
+ 	switch (ipconfig->method) {
+ 	case CONNMAN_IPCONFIG_METHOD_UNKNOWN:
+ 	case CONNMAN_IPCONFIG_METHOD_OFF:
++	case CONNMAN_IPCONFIG_METHOD_PASSTHROUGH:
+ 		return;
+ 
+ 	case CONNMAN_IPCONFIG_METHOD_FIXED:
+@@ -1871,6 +1882,7 @@ void __connman_ipconfig_append_ipv6config(struct connman_ipconfig *ipconfig,
+ 	case CONNMAN_IPCONFIG_METHOD_UNKNOWN:
+ 	case CONNMAN_IPCONFIG_METHOD_OFF:
+ 	case CONNMAN_IPCONFIG_METHOD_DHCP:
++	case CONNMAN_IPCONFIG_METHOD_PASSTHROUGH:
+ 		return;
+ 	case CONNMAN_IPCONFIG_METHOD_FIXED:
+ 	case CONNMAN_IPCONFIG_METHOD_MANUAL:
+@@ -1914,6 +1926,7 @@ void __connman_ipconfig_append_ipv4config(struct connman_ipconfig *ipconfig,
+ 	case CONNMAN_IPCONFIG_METHOD_OFF:
+ 	case CONNMAN_IPCONFIG_METHOD_DHCP:
+ 	case CONNMAN_IPCONFIG_METHOD_AUTO:
++	case CONNMAN_IPCONFIG_METHOD_PASSTHROUGH:
+ 		return;
+ 	case CONNMAN_IPCONFIG_METHOD_FIXED:
+ 	case CONNMAN_IPCONFIG_METHOD_MANUAL:
+@@ -2087,6 +2100,11 @@ int __connman_ipconfig_set_config(struct connman_ipconfig *ipconfig,
+ 
+ 		ipconfig->method = method;
+ 		break;
++	case CONNMAN_IPCONFIG_METHOD_PASSTHROUGH:
++		connman_error("__connman_ipconfig_set_config received Passthrough method");
++		return -EINVAL;
++		break;
++
+ 	}
+ 
+ 	return 0;
+@@ -2315,6 +2333,7 @@ int __connman_ipconfig_save(struct connman_ipconfig *ipconfig,
+ 	case CONNMAN_IPCONFIG_METHOD_UNKNOWN:
+ 	case CONNMAN_IPCONFIG_METHOD_OFF:
+ 	case CONNMAN_IPCONFIG_METHOD_AUTO:
++	case CONNMAN_IPCONFIG_METHOD_PASSTHROUGH:
+ 		return 0;
+ 	}
+ 
+diff --git a/src/network.c b/src/network.c
+index 56fe24ff..4ee39e37 100644
+--- a/src/network.c
++++ b/src/network.c
+@@ -148,7 +148,7 @@ static void set_configuration(struct connman_network *network,
+ {
+ 	struct connman_service *service;
+ 
+-	DBG("network %p", network);
++	DBG("network %p, config type %d", network, type);
+ 
+ 	if (!network->device)
+ 		return;
+@@ -526,6 +526,34 @@ err:
+ 	return err;
+ }
+ 
++/****
++ * Sets the state to READY so that the connman doesn't take over the 
++ * DHCP process.
++ * Acts just like manual configuration, but allows the downstream device
++ * to bind to the address.
++ */
++static int set_connected_passthrough(struct connman_network *network)
++{
++	int err = 0;
++	struct connman_service *service;
++	struct connman_ipconfig *ipconfig;
++
++	DBG("network %p", network);
++
++	network->connecting = false;
++
++	service = connman_service_lookup_from_network(network);
++	ipconfig = __connman_service_get_ip4config(service);
++	__connman_ipconfig_enable(ipconfig);
++
++	// Passthrough doesn't go any further, so set state to READY
++	err = __connman_service_ipconfig_indicate_state(service,
++								CONNMAN_SERVICE_STATE_READY,
++								CONNMAN_IPCONFIG_TYPE_IPV4);
++	DBG("return value: %d", err);
++	return err;
++}
++
+ static void remove_dhcp_timeout(struct connman_network *network)
+ {
+ 	if (network->dhcp_timeout > 0) {
+@@ -632,6 +660,34 @@ static int manual_ipv6_set(struct connman_network *network,
+ 	return 0;
+ }
+ 
++static int passthrough_ipv6_set(struct connman_network *network,
++				struct connman_ipconfig *ipconfig_ipv6)
++{
++	struct connman_service *service;
++	int err;
++
++	DBG("network %p ipv6 %p", network, ipconfig_ipv6);
++
++	service = connman_service_lookup_from_network(network);
++	if (!service)
++		return -EINVAL;
++
++	__connman_ipconfig_enable_ipv6(ipconfig_ipv6);
++
++	__connman_device_set_network(network->device, network);
++
++	connman_network_set_associating(network, false);
++
++	network->connecting = false;
++
++	// Passthrough doesn't go any further, so set state to READY
++	err = __connman_service_ipconfig_indicate_state(service,
++								CONNMAN_SERVICE_STATE_READY,
++								CONNMAN_IPCONFIG_TYPE_IPV6);
++	DBG("__connman_service_ipconfig_indicate_state returned: %d", err);
++	return 0;
++}
++
+ static void stop_dhcpv6(struct connman_network *network)
+ {
+ 	network->connecting = false;
+@@ -1938,6 +1994,10 @@ int __connman_network_enable_ipconfig(struct connman_network *network,
+ 			r = manual_ipv6_set(network, ipconfig);
+ 			break;
+ 
++		case CONNMAN_IPCONFIG_METHOD_PASSTHROUGH:
++			r = passthrough_ipv6_set(network, ipconfig);
++			break;
++
+ 		case CONNMAN_IPCONFIG_METHOD_DHCP:
+ 			r = -ENOSYS;
+ 			break;
+@@ -1966,6 +2026,10 @@ int __connman_network_enable_ipconfig(struct connman_network *network,
+ 			r = set_connected_manual(network);
+ 			break;
+ 
++		case CONNMAN_IPCONFIG_METHOD_PASSTHROUGH:
++			r = set_connected_passthrough(network);
++			break;
++
+ 		case CONNMAN_IPCONFIG_METHOD_DHCP:
+ 			r = set_connected_dhcp(network);
+ 			break;
+diff --git a/src/service.c b/src/service.c
+index 3202f26c..91d5d2bc 100644
+--- a/src/service.c
++++ b/src/service.c
+@@ -6126,6 +6126,7 @@ int __connman_service_ipconfig_indicate_state(struct connman_service *service,
+ 	case CONNMAN_IPCONFIG_METHOD_MANUAL:
+ 	case CONNMAN_IPCONFIG_METHOD_DHCP:
+ 	case CONNMAN_IPCONFIG_METHOD_AUTO:
++	case CONNMAN_IPCONFIG_METHOD_PASSTHROUGH:
+ 		break;
+ 
+ 	}
+-- 
+2.25.1
+
