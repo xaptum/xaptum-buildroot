@@ -4,10 +4,10 @@
 #
 ################################################################################
 
-HSS_VERSION = aca2099f582a3cbd16330a686409a43b05dc3748
+HSS_VERSION = 434c28f7a83dfa0a792189686b84f1658c18bbe7
 HSS_SITE = $(call github,xaptum,hss,$(HSS_VERSION))
-HSS_LICENSE = Apache-2.0
-HSS_LICENSE_FILES = LICENSE
+HSS_LICENSE_FILES = COPYING
+HSS_LICENSE = GPL-2.0
 
 $(eval $(generic-package))
 

@@ -4,10 +4,11 @@
 #
 ################################################################################
 
-MENDER_CERTS_VERSION = 03e4fb8a7c2aaee3a83c115448137da750410a82
-MENDER_CERTS_SITE = ssh://git@github.com/xaptum/xaprc.git
-MENDER_CERTS_SITE_METHOD = git
+MENDER_CERTS_VERSION = f648290ac569cdcb989dd7d27018fd3b3a09525a
+MENDER_CERTS_SITE = $(call github,xaptum,xaprc,$(MENDER_CERTS_VERSION))
 MENDER_CERTS_SUPPORTS_IN_SOURCE_BUILD = NO
+MENDER_CERTS_LICENSE = Apache-2.0
+MENDER_CERTS_LICENSE_FILES = LICENSE
 
 MENDER_CERTS_SUBDIR = mender-certs
 

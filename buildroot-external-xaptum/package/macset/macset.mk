@@ -4,10 +4,11 @@
 #
 ################################################################################
 
-MACSET_VERSION = 43a6b9d53c3bbb2763c69d037622174a98184b49
-MACSET_SITE = ssh://git@github.com/xaptum/xaprc.git
-MACSET_SITE_METHOD = git
+MACSET_VERSION = f648290ac569cdcb989dd7d27018fd3b3a09525a
+MACSET_SITE = $(call github,xaptum,xaprc,$(MACSET_VERSION))
 MACSET_SUPPORTS_IN_SOURCE_BUILD = NO
+MACSET_LICENSE = GPL-2.0
+MACSET_LICENSE_FILES = COPYING
 
 MACSET_SUBDIR = macset
 
