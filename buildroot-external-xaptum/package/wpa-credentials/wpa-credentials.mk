@@ -4,10 +4,11 @@
 #
 ################################################################################
 
-WPA_CREDENTIALS_VERSION = 086c955ed46dbfbd8ad9eeaadffa577c9eaea4e4
-WPA_CREDENTIALS_SITE = ssh://git@github.com/xaptum/xaprc.git
-WPA_CREDENTIALS_SITE_METHOD = git
+WPA_CREDENTIALS_VERSION = f648290ac569cdcb989dd7d27018fd3b3a09525a
+WPA_CREDENTIALS_SITE = $(call github,xaptum,xaprc,$(WPA_CREDENTIALS_VERSION))
 WPA_CREDENTIALS_SUPPORTS_IN_SOURCE_BUILD = NO
+WPA_CREDENTIALS_LICENSE = GPL-2.0
+WPA_CREDENTIALS_LICENSE_FILES = COPYING
 
 WPA_CREDENTIALS_SUBDIR = wpa-credentials
 

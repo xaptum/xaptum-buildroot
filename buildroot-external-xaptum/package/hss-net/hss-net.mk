@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-HSS_NET_VERSION = aca2099f582a3cbd16330a686409a43b05dc3748
+HSS_NET_VERSION = 434c28f7a83dfa0a792189686b84f1658c18bbe7
 HSS_NET_SITE = $(call github,xaptum,hss,$(HSS_NET_VERSION))
 HSS_NET_LICENSE = GPL-2.0
 HSS_NET_DEPENDENCIES = linux

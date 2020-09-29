@@ -4,11 +4,10 @@
 #
 ################################################################################
 
-CAPTIVED_VERSION = a0e91d72b0db63246fb197c52083fdcb3a7c921c
-CAPTIVED_SITE = ssh://git@github.com/xaptum/xaprc.git
-CAPTIVED_SITE_METHOD = git
+CAPTIVED_VERSION = f648290ac569cdcb989dd7d27018fd3b3a09525a
+CAPTIVED_SITE = $(call github,xaptum,xaprc,$(CAPTIVED_VERSION))
 CAPTIVED_SUPPORTS_IN_SOURCE_BUILD = NO
-
+CAPTIVED_LICENSE = Apache-2.0
 CAPTIVED_SUBDIR = captived
 
 CAPTIVED_DEPENDENCIES += libevent jansson

@@ -4,10 +4,10 @@
 #
 ################################################################################
 
-ETC_HOSTS_VERSION = 22ab669e3a6e25a634210d79b546fd7572bc837a
-ETC_HOSTS_SITE = ssh://git@github.com/xaptum/xaprc.git
-ETC_HOSTS_SITE_METHOD = git
+ETC_HOSTS_VERSION = f648290ac569cdcb989dd7d27018fd3b3a09525a
+ETC_HOSTS_SITE = $(call github,xaptum,xaprc,$(ETC_HOSTS_VERSION))
 ETC_HOSTS_SUPPORTS_IN_SOURCE_BUILD = NO
+ETC_HOSTS_LICENSE = Apache-2.0
 
 ETC_HOSTS_SUBDIR = etc-hosts
 

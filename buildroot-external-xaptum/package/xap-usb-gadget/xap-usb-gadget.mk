@@ -4,9 +4,8 @@
 #
 ################################################################################
 
-XAP_USB_GADGET_VERSION = bcb4013e7e743cc699bcd00600392f0fe5959843
-XAP_USB_GADGET_SITE = ssh://git@github.com/xaptum/xaprc.git
-XAP_USB_GADGET_SITE_METHOD = git
+XAP_USB_GADGET_VERSION = f648290ac569cdcb989dd7d27018fd3b3a09525a
+XAP_USB_GADGET_SITE = $(call github,xaptum,xaprc,$(XAP_USB_GADGET_VERSION))
 XAP_USB_GADGET_LICENSE = Apache-2.0
 XAP_USB_GADGET_LICENSE_FILES = LICENSE
 XAP_USB_GADGET_SUPPORTS_IN_SOURCE_BUILD = NO
