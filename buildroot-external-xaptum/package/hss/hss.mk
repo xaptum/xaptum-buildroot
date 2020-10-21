@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-HSS_VERSION = 434c28f7a83dfa0a792189686b84f1658c18bbe7
+HSS_VERSION = 7319496680682a61c9a33252359136c339d3f0c6
 HSS_SITE = $(call github,xaptum,hss,$(HSS_VERSION))
 HSS_LICENSE_FILES = COPYING
 HSS_LICENSE = GPL-2.0
