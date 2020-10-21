@@ -1,12 +1,15 @@
-# Xaptum Buildroot External
+# Xaptum Buildroot
 
-External buildroot tree for the Xaptum router card firmware.
+Buildroot tree for Xaptum router card firmware.
 
 ## Organization
 
-`buildroot` - the upstream Buildroot tree (git submodule)
-
-`buildroot-external` - the external Buildroot tree for Xaptum boards and pacakges
+* `buildroot` - the upstream Buildroot tree (git submodule)
+* `buildroot-external` - the external Buildroot tree for Xaptum boards and pacakges
+	* `board` Configurations and static overlay files specific to the `xaprc*` and `xaprw*` builds.
+	* `configs` Buildroot defconfigs
+	* `package` Out of tree package definitions
+	* `patches` Patches to apply to packages
 
 ## Preparation
 
@@ -31,38 +34,27 @@ make menuconfig
 # Customize the linux config, if desired
 make linux-menuconfig
 
-# Build the firmware
-make
+# Build using Buildroots official Docker image
+sudo docker run -v $(dirname $(pwd)):$(dirname $(pwd)) buildroot/base bash -c "cd $(pwd); make BR2_JLEVEL=$(nproc)"
+
+# Or build the firmware locally. See buildroot docs for dependencies
+make BR2_JLEVEL=$(nproc)
 ```
 
-The firmware image will be built in
+The firmware image will be built as
 `images/emmc.img`.
 
 Use separate build directories to simplify working with multiple
-configurations.  The builds will not interfere with each other and
+configurations. The builds will not interfere with each other and
 switching between configurations won't require a clean and full
 rebuild.
 
 ``` bash
 cd build
-
 # Initialize a build directory for one config
-mkdir sama5d2_xplained_xaprc
-pushd sama5d2_xplained_xaprc
-
-make O=$PWD -C ../.. sama5d2_xplained_xaprc_defconfig
-<...>
-
-popd
-
-# Initialize a build directory for second config
-mkdir xaprc001_defconfig
-pushd xaprc001_defconfig
-
-make O=$PWD -C ../.. xaprc001_defconfig
-<...>
-
-popd
+mkdir xaprw_dev_build
+pushd xaprw_dev_build
+make O=$PWD -C ../.. xaprw001_dev_defconfig
 ```
 
 ## Defconfigs
@@ -75,11 +67,6 @@ card.
 `xaprc001_dev_defconfig` - a config for the XAP-RC-001 router card
 that enables extra development and debugging tools and options.
 
-`sama5d2_xplained_xaprc_defconfig` - a config for the SAMA5D2
-Xplained development board that closely mirrors that of the
-`xaprc001`. Useful for development that requires additional hardware
-(e.g., an ethernet port or additional USB port).
-
 `xaprw001_defconfig` - the production config the XAP-RW-001 router
 card. This hardware is nearly identifical to the XAP-RC-001, but
 includes a WiFi chipset.
@@ -89,77 +76,22 @@ enables extra development and debugging tools and options. This
 hardware is nearly identifical to the XAP-RC-001, but includes a WiFi
 chipset.
 
-## xaprc_eval_tool
+`xaprc001_prov_defconfig` - a config for the XAP-RC-001 router card
+that runs live in RAM and exposes the cards TPM to the host. Used
+for initial provisioning.
 
-This tool can be used to control the development board for the router
-cards.  It uses `libftdi`, not `ftd2xx`, and thus can be run
-concurrently with the `ftdi_sio` kernel module.
+## Writing Images
 
-You can attach to the `/dev/ttyS2` (or `/dev/ttyS3`) serial console
-while also controlling the development board.
+Xaptum provides [xaprc-provisioning](https://github.com/xaptum/xaprc-provisioning) for writing firmware images to the card.
 
-It is built in
-`buildroot/output/host/usr/bin/xaprc_eval_tool`.
+# Running the flashed firmware
 
-`xaprc_eval_tool -s 1 boot romboot reboot` will configure slot 1 to
-disable boot and then power cycle the card.
-
-`xaprc_eval_tool -s 1 boot emmc reboot` will configure slot 1 to
-reenable boot and then power cycle the card.
-
-The following commands are supported
-
-- `power on`
-- `power off`
-- `reboot`
-- `boot romboot`
-- `boot emmc`
-- `wireless disable`
-- `wireless enable`
-
-See `xaprc_eval_tool --help` for full options.
-
-## SAM-BA
-
-The SAM-BA software can be used to flash a new firmware to the board.
-
-### Installation
-
-Download the precompiled sam-ba utility from the following link.
-
-http://ww1.microchip.com/downloads/en/DeviceDoc/sam-ba_3.2.1-linux_x86_64.tar
-
-### Usage
-
-``` bash
-# Reboot the card into the romboot mode
-xaprc_eval_tool -s 1 boot romboot reboot
-
-# Enable regular users to write to the device
-sudo chmod a+rw /dev/ttyACM0
-
-# Flash the new firmware to the card
-sam-ba -p serial -b sama5d2-xplained -a sdmmc -c write:emmc.img
-
-# Reboot the card from the emmc
-xaprc_eval_tool -s 1 boot emcc reboot
-```
-
-## Serial console
-
-A serial console is available on `/dev/ttyUSB2` (for slot 1 on the
-evaluation kit) or `/dev/ttyUSB3` (for slot 2 on the evaluation kit).
-
-Connect to the serial console using a terminal emulator like minicom.
-
-``` bash
-sudo minicom -D /dev/ttyUSB2
-```
+Once the firmware is written future power cycles will boot the written image without further user intervention. Xaptum provides [xaprc-control](https://github.com/xaptum/xaprc-control) for controlling the cards boot states on development and production programming boards.
 
 ## Help
 
 Read the [Buildroot
-manual](https://buildroot.org/downloads/manual/manual.html) manually,
+manual](https://buildroot.org/downloads/manual/manual.html),
 paying particular attention to the section on [Project-specific
 customization](https://buildroot.org/downloads/manual/manual.html#customize). It
 is very well written.
