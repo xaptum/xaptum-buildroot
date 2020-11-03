@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-CAPTIVED_VERSION = f648290ac569cdcb989dd7d27018fd3b3a09525a
+CAPTIVED_VERSION = 2244270756c0a0c87e471bd58777b7cde87d40d5
 CAPTIVED_SITE = $(call github,xaptum,xaprc,$(CAPTIVED_VERSION))
 CAPTIVED_SUPPORTS_IN_SOURCE_BUILD = NO
 CAPTIVED_LICENSE = Apache-2.0
