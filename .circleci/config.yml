@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  aws-s3: circleci/aws-s3@2.0.0
+
 commands:
   checkout-all:
     description: "A checkout that updates submodules"
@@ -35,19 +38,6 @@ commands:
           command: |
             apt-get update && apt-get install -y \
               git wget ca-certificates
-
-  configure-mender-cacerts:
-    description: "Add CA certs for our mender server"
-    steps:
-      - run:
-          name: Install Xaptum-Mender root CA cert
-          command: |
-            cp .circleci/Xaptum-Mender.crt /usr/local/share/ca-certificates/
-            update-ca-certificates
-      - run:
-          name: Add /etc/hosts entry for Xaptum mender server
-          command: |
-            echo "13.59.76.99     mender.xaptum.xyz" >> /etc/hosts
 
 jobs:
   build:
@@ -148,26 +138,14 @@ jobs:
       defconfig:
         type: string
     docker:
-      - image: debian:stretch
+        - image: 'cimg/python:3.6'
     steps:
-      - install-circleci-deps
       - checkout-all
-      - configure-mender-cacerts
       - attach_workspace:
-          at: /root/project
-      - run:
-          name: Install mender-cli
-          command: |
-            wget https://d1b0l86ne08fsf.cloudfront.net/mender-cli/1.1.0/mender-cli -O /usr/bin/mender-cli
-            chmod a+x /usr/bin/mender-cli
-      - run:
-          name: Login to mender
-          command: |
-            mender-cli login --server https://mender.xaptum.xyz --username $XAPTUM_MENDER_DEV_USERNAME --password $XAPTUM_MENDER_DEV_PASSWORD
-      - run:
-          name: Deploy the signed artifact
-          command: |
-            ./.circleci/deploy_signed_artifact.sh << parameters.defconfig >>
+          at: /home/circleci/project
+      - aws-s3/copy:
+          from: build/<< parameters.defconfig >>/artifacts/artifact-signed-*.mender
+          to: 's3://xaptum-captive-firmware-dev'
 
 workflows:
   version: 2
@@ -194,7 +172,7 @@ workflows:
               only: /^v.*/
       - deploy:
           defconfig: xaprc001_dev
-          context: dev.mender.xaptum.xyz
+          context: aws-circle-captive-deploy
           requires:
             - sign
           filters:
@@ -230,7 +208,7 @@ workflows:
               only: /^v.*/
       - deploy:
           defconfig: xaprw001_dev
-          context: dev.mender.xaptum.xyz
+          context: aws-circle-captive-deploy
           requires:
             - sign
           filters:
